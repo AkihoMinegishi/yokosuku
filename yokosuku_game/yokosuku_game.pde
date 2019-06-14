@@ -1,7 +1,25 @@
 class Title {
 }
 
-abstract class Stage {
+class Stage {
+  float[] prex = new float[128], 
+          prey = new float[128], 
+          pred = new float[128];
+  int precnt = 0;
+  
+  void showBroken() {
+    for(int i = 0; i < precnt; i++) {
+      fill(128, 0, 0);
+      ellipse(prex[i], prey[i], pred[i], pred[i]);
+    }
+  }
+  
+  void inputPre(float px, float py, float pd) {
+    prex[precnt] = px;
+    prey[precnt] = py;
+    pred[precnt] = pd;
+    precnt++;
+  }
 }
 
 class Stage1 {
@@ -18,7 +36,7 @@ class Stage4 {
 
 class Chara {
   float cx, cy, cd = 30.0;
-  int life = 3, dam = 3;
+  int lifemax = 3, life = 3, dam = 3;
   color chcol;
   boolean playing = true;
   
@@ -83,14 +101,17 @@ class Chara {
     cx = width / 2;
     cy = height / 2;
     chcol = color(128, 255, 0);
+    life = lifemax;
+    playing = true;
   }
   
-  void gameover() {
+  void dead() {
     playing = false;
     chcol = color(128, 0, 0);
   }
 }
 
+Stage st = new Stage();
 Chara ch = new Chara();
 
 void keyPressed() {
@@ -109,8 +130,27 @@ void keyPressed() {
   }
 }
 
+void showMessage(String mes, int strsize, int strX, int strY) {
+  fill(0);
+  textSize(strsize);
+  text(mes, strX, strY);
+}
+
 void init_game() {
   ch.init();
+}
+
+void askContinue() {
+  showMessage("PRESS 'R' TO PLAY AGAIN", 16, width / 2, height / 2 + 24);
+  if(keyPressed && (key == 'r' || key == 'R')) {
+    st.inputPre(ch.cx, ch.cy, ch.cd);
+    init_game();
+  }
+}
+
+void gameFailed() {
+  showMessage("You Lose :(", 28, width / 2, height / 2);
+  askContinue();
 }
 
 void jud_safe() {
@@ -129,7 +169,7 @@ void jud_safe() {
   }
   
   if(ch.ifdead()) {
-    ch.gameover();
+    ch.dead();
   }
 }
 
@@ -140,6 +180,11 @@ void setup() {
 
 void draw() {
   background(255);
+  if(ch.ifdead()) {
+    gameFailed();
+  } else {
+    jud_safe();
+  }
   ch.draw_chara();
-  jud_safe();
+  st.showBroken();
 }
