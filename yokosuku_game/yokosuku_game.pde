@@ -1,3 +1,15 @@
+class GameFlow {
+  int diecnt = 0;
+  
+  void dead() {
+    diecnt++;
+  }
+  
+  int deadCount() {
+    return diecnt;
+  }
+}
+
 class Title {
 }
 
@@ -19,6 +31,10 @@ class Stage {
     prey[precnt] = py;
     pred[precnt] = pd;
     precnt++;
+  }
+  
+  float[] callBroken(int i) {
+    return {prex[i], prey[i], pred[i], pred[i]};
   }
 }
 
@@ -47,6 +63,14 @@ class Chara {
     } else {
       return true;
     } 
+  }
+  
+  boolean ifsafe_elps(float ex, float ey, float ew, float eh) {
+    if() {
+      return false;
+    } else {
+      return true;
+    }
   }
   
   void damage() {
@@ -111,6 +135,7 @@ class Chara {
   }
 }
 
+GameFlow gf = new GameFlow();
 Stage st = new Stage();
 Chara ch = new Chara();
 
@@ -143,6 +168,7 @@ void init_game() {
 void askContinue() {
   showMessage("PRESS 'R' TO PLAY AGAIN", 16, width / 2, height / 2 + 24);
   if(keyPressed && (key == 'r' || key == 'R')) {
+    gf.dead();
     st.inputPre(ch.cx, ch.cy, ch.cd);
     init_game();
   }
@@ -161,6 +187,15 @@ void jud_safe() {
                        {0.0, width, height, height + 1.0}};
   for(i = 0; i < 4; i++) {
     if(ch.ifsafe_area(walls[i]) == false) {
+      ch.damage();
+      if(ch.ifdead()) {
+        break;
+      }
+    }
+  }
+  
+  for(i = 0; i < gf.deadCount(); i++) {
+    if(ch.ifsafe_elps(st.callBroken(i)) == false) {
       ch.damage();
       if(ch.ifdead()) {
         break;
