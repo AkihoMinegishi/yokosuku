@@ -1,5 +1,19 @@
 class GameFlow {
+  boolean nowTitle, nowGame, nowClear;
+  int nowStage = 0;
   int diecnt = 0;
+  
+  GameFlow() {
+    nowTitle = true;
+    nowGame = nowClear = false;
+  }
+  
+  void moveNextStage() {
+    nowGame = true;
+    nowTitle = nowClear = false;
+    nowStage++;
+    diecnt = 0;
+  }
   
   void dead() {
     diecnt++;
@@ -7,6 +21,11 @@ class GameFlow {
   
   int deadCount() {
     return diecnt;
+  }
+  
+  void allClear() {
+    nowClear = true;
+    nowTitle = nowGame = false;
   }
 }
 
