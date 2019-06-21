@@ -34,7 +34,8 @@ class Stage {
   }
   
   float[] callBroken(int i) {
-    return {prex[i], prey[i], pred[i], pred[i]};
+    float sets[] = {prex[i], prey[i], pred[i], pred[i]};
+    return sets;
   }
 }
 
@@ -51,7 +52,7 @@ class Stage4 {
 }
 
 class Chara {
-  float cx, cy, cd = 30.0;
+  float cx, cy, cd = 30.0, cr = cd / 2.0;
   int lifemax = 3, life = 3, dam = 3;
   color chcol;
   boolean playing = true;
@@ -65,8 +66,9 @@ class Chara {
     } 
   }
   
-  boolean ifsafe_elps(float ex, float ey, float ew, float eh) {
-    if() {
+  boolean ifsafe_elps(float sets[]) {
+    float ex = sets[0], ey = sets[1], ew = sets[2], eh = sets[3];
+    if(pow(cx - ex, 2) * pow(ew / 2.0 + cr, -2) + pow(cy - ey, 2) * pow(eh / 2.0 + cr, -2) <= 1) {
       return false;
     } else {
       return true;
