@@ -9,10 +9,10 @@ class GameFlow {
   }
   
   void moveNextStage() {
-    nowGame = true;
-    nowTitle = nowClear = false;
     nowStage++;
     diecnt = 0;
+    nowGame = true;
+    nowTitle = nowClear = false;
   }
   
   void dead() {
@@ -30,7 +30,25 @@ class GameFlow {
 }
 
 class Title {
+  void display_title() {
+    int size = 24;
+    String mes = "kusoge";
+    background(0);
+    textSize(size);
+    text(mes, width/2 - size*mes.length()/3, height/2);
+  }
   
+  boolean askStart() {
+    int size = 24;
+    String mes = "press Enter";
+    text(mes, width/2 - size*mes.length()/3, height * 2 / 3);
+    
+    if(keyPressed && (keyCode == ENTER)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }
 
 class Stage {
@@ -38,6 +56,10 @@ class Stage {
           prey = new float[128], 
           pred = new float[128];
   int precnt = 0;
+  
+  void showBg() {
+    background(255);
+  }
   
   void showBroken() {
     for(int i = 0; i < precnt; i++) {
@@ -158,6 +180,7 @@ class Chara {
 }
 
 GameFlow gf = new GameFlow();
+Title ti = new Title();
 Stage st = new Stage();
 Chara ch = new Chara();
 
@@ -236,12 +259,19 @@ void setup() {
 }
 
 void draw() {
-  background(255);
-  if(ch.ifdead()) {
-    gameFailed();
-  } else {
-    jud_safe();
+  if(gf.nowTitle) {
+    ti.display_title();
+    if(ti.askStart()) {
+      gf.moveNextStage();
+    }
+  } else if(gf.nowGame) {
+    if(ch.ifdead()) {
+      gameFailed();
+    } else {
+      jud_safe();
+    }
+    ch.draw_chara();
+    st.showBroken();
+  } else if(gf.nowClear) {
   }
-  ch.draw_chara();
-  st.showBroken();
 }
