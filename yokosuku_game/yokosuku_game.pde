@@ -1,5 +1,5 @@
 class GameFlow {
-  boolean nowTitle, nowGame, nowClear;
+  boolean nowTitle, nowGame, nowClear, pressedEnter;
   int nowStage = 0;
   int diecnt = 0;
   
@@ -8,12 +8,25 @@ class GameFlow {
     nowGame = nowClear = false;
   }
   
+  void pressedEnter() {
+    pressedEnter = true;
+  }
+  
   void moveNextStage() {
     nowStage++;
     diecnt = 0;
     nowGame = true;
     nowTitle = nowClear = false;
   }
+  
+  boolean askStartGame() {
+    if(nowTitle && pressedEnter) {
+      pressedEnter = false;
+      return true;
+    } else {
+      return false;
+    }
+  } 
   
   void dead() {
     diecnt++;
@@ -36,18 +49,6 @@ class Title {
     background(0);
     textSize(size);
     text(mes, width/2 - size*mes.length()/3, height/2);
-  }
-  
-  boolean askStart() {
-    int size = 24;
-    String mes = "press Enter";
-    text(mes, width/2 - size*mes.length()/3, height * 2 / 3);
-    
-    if(keyPressed && (keyCode == ENTER)) {
-      return true;
-    } else {
-      return false;
-    }
   }
 }
 
@@ -198,6 +199,10 @@ void keyPressed() {
   if(keyCode == DOWN) {
     ch.move_chara(0, step);
   }
+  
+  if(keyCode == ENTER) {
+    gf.pressedEnter();
+  }
 }
 
 void showMessage(String mes, int strsize, int strX, int strY) {
@@ -261,10 +266,12 @@ void setup() {
 void draw() {
   if(gf.nowTitle) {
     ti.display_title();
-    if(ti.askStart()) {
+    if(gf.askStartGame()) {
+      init_game();
       gf.moveNextStage();
     }
   } else if(gf.nowGame) {
+    background(255);
     if(ch.ifdead()) {
       gameFailed();
     } else {
