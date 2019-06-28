@@ -8,8 +8,8 @@ class GameFlow {
     nowGame = nowClear = false;
   }
   
-  void pressedEnter() {
-    pressedEnter = true;
+  void defEnter(boolean bo) {
+    pressedEnter = bo;
   }
   
   void moveNextStage() {
@@ -201,7 +201,13 @@ void keyPressed() {
   }
   
   if(keyCode == ENTER) {
-    gf.pressedEnter();
+    gf.defEnter(true);
+  }
+}
+
+void keyReleased() {
+  if(keyCode == ENTER) {
+    gf.defEnter(false);
   }
 }
 
