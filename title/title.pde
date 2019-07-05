@@ -3,10 +3,14 @@ class Title {
   void display_title() {
     background(0,0,0);
     textSize(48);
-    text("I WANNA (ry"             ,width/5, height/3);
+    text("I WANNA (ry"             ,100, 100);
     textSize(24);
-    text("How to play -press H"    ,width/5, height*6/9);
-    text("Game start  -press ENTER",width/5, height*7/9);
+    text("How to play -press H"    ,150, 200);
+    text("Game start"              ,150, 250);
+    text("     tutorial    -press 0"    ,150, 275);
+    text("     stage1     -press 1"    ,150, 300);
+    text("     stage2     -press 2"    ,150, 325);
+    text("     stage3     -press 3"    ,150, 350);
   }
   void display_how_to_play() {
     background(0,0,0);
@@ -29,5 +33,5 @@ void setup() {
 }
 
 void draw() {
-  t.display_how_to_play();
+  t.display_title();
 }
