@@ -174,10 +174,6 @@ class Chara {
 GameFlow gf = new GameFlow();
 Title ti = new Title();
 Stage[] st = new Stage[4];
-st[0] = new Stage1();
-st[1] = new Stage2();
-st[2] = new Stage3();
-st[3] = new Stage4();
 Chara ch = new Chara();
 
 void keyPressed() {
@@ -195,7 +191,7 @@ void keyPressed() {
     ch.move_chara(0, step);
   }
   
-  for(int stage = 1; stage <= 4; stage++) {
+  for(int stage = 0; stage < 4; stage++) {
     if(key == char(stage)) {
       if(gf.nowTitle) {
         gf.warpStage(stage);
@@ -222,7 +218,7 @@ void askContinue() {
   showMessage("PRESS 'R' TO PLAY AGAIN", 16, width / 2, height / 2 + 24);
   if(keyPressed && (key == 'r' || key == 'R')) {
     gf.dead();
-    st.inputPre(ch.cx, ch.cy, ch.cd);
+    st[gf.nowStage].inputPre(ch.cx, ch.cy, ch.cd);
     init_game();
   }
 }
@@ -248,7 +244,7 @@ void jud_safe() {
   }
   
   for(i = 0; i < gf.deadCount(); i++) {
-    if(ch.ifsafe_elps(st.callBroken(i)) == false) {
+    if(ch.ifsafe_elps(st[gf.nowStage].callBroken(i)) == false) {
       ch.damage();
       if(ch.ifdead()) {
         break;
@@ -263,6 +259,12 @@ void jud_safe() {
 
 void setup() {
   size(600, 400);
+  
+  st[0] = new Stage1();
+  st[1] = new Stage2();
+  st[2] = new Stage3();
+  st[3] = new Stage4();
+  
   init_game();
 }
 
@@ -270,14 +272,15 @@ void draw() {
   if(gf.nowTitle) {
     ti.display_title();
   } else if(gf.nowGame) {
-    background(255);
+    st[gf.nowStage].showBg();
     if(ch.ifdead()) {
       gameFailed();
     } else {
       jud_safe();
     }
     ch.draw_chara();
-    st.showBroken();
+    st[gf.nowStage].showBroken();
   } else if(gf.nowClear) {
   }
 }
+
