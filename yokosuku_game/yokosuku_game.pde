@@ -1,41 +1,32 @@
 class GameFlow {
-  boolean nowTitle, nowGame, nowClear, pressedEnter;
-  int nowStage = 0;
-  int diecnt = 0;
+  boolean nowTitle, nowGame, nowClear, pressedEnter; //judge statement
+  int nowStage = 0; //stage number
+  int diecnt = 0; //counting death(reseted by moving stage)
   
   GameFlow() {
     nowTitle = true;
     nowGame = nowClear = false;
   }
   
-  void defEnter(boolean bo) {
-    pressedEnter = bo;
-  }
-  
-  void moveNextStage() {
-    nowStage++;
+  //reset die count and warp stage
+  void warpStage(int dir) {
+    nowStage = dir;
     diecnt = 0;
     nowGame = true;
     nowTitle = nowClear = false;
   }
   
-  boolean askStartGame() {
-    if(nowTitle && pressedEnter) {
-      pressedEnter = false;
-      return true;
-    } else {
-      return false;
-    }
-  } 
-  
+  //+1 die count
   void dead() {
     diecnt++;
   }
   
+  //get die count
   int deadCount() {
     return diecnt;
   }
   
+  //move to the end of the game
   void allClear() {
     nowClear = true;
     nowTitle = nowGame = false;
@@ -82,16 +73,16 @@ class Stage {
   }
 }
 
-class Stage1 {
+class Stage1 extends Stage{
 }
 
-class Stage2 {
+class Stage2 extends Stage{
 }
 
-class Stage3 {
+class Stage3 extends Stage{
 }
 
-class Stage4 {
+class Stage4 extends Stage{
 }
 
 class Chara {
@@ -182,7 +173,11 @@ class Chara {
 
 GameFlow gf = new GameFlow();
 Title ti = new Title();
-Stage st = new Stage();
+Stage[] st = new Stage[4];
+st[0] = new Stage1();
+st[1] = new Stage2();
+st[2] = new Stage3();
+st[3] = new Stage4();
 Chara ch = new Chara();
 
 void keyPressed() {
@@ -200,15 +195,17 @@ void keyPressed() {
     ch.move_chara(0, step);
   }
   
-  if(keyCode == ENTER) {
-    gf.defEnter(true);
+  for(int stage = 1; stage <= 4; stage++) {
+    if(key == char(stage)) {
+      if(gf.nowTitle) {
+        gf.warpStage(stage);
+        init_game();
+      }
+    }
   }
 }
 
 void keyReleased() {
-  if(keyCode == ENTER) {
-    gf.defEnter(false);
-  }
 }
 
 void showMessage(String mes, int strsize, int strX, int strY) {
@@ -272,10 +269,6 @@ void setup() {
 void draw() {
   if(gf.nowTitle) {
     ti.display_title();
-    if(gf.askStartGame()) {
-      init_game();
-      gf.moveNextStage();
-    }
   } else if(gf.nowGame) {
     background(255);
     if(ch.ifdead()) {
