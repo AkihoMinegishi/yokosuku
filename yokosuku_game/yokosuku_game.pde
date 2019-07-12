@@ -43,15 +43,16 @@ class Title {
   }
 }
 
-class Stage {
+abstract class Stage {
+  int rectN, elpsN;
+  float[] obrect = new float[128][4];
+  float[] obelps = new float[128][4];
   float[] prex = new float[128], 
           prey = new float[128], 
           pred = new float[128];
   int precnt = 0;
   
-  void showBg() {
-    background(255);
-  }
+  abstract void showBg();
   
   void showBroken() {
     for(int i = 0; i < precnt; i++) {
@@ -67,22 +68,39 @@ class Stage {
     precnt++;
   }
   
-  float[] callBroken(int i) {
+  float[] callBrokenPoint(int i) {
     float sets[] = {prex[i], prey[i], pred[i], pred[i]};
     return sets;
   }
 }
 
 class Stage1 extends Stage{
+  void showBg() {
+    background(255, 255, 224);
+  }
 }
 
 class Stage2 extends Stage{
+  obrect[0] = {width, width + 1.0, 0.0, height};
+  obrect[1] = {-1.0, 0.0, 0.0, height};
+  obrect[2] = {0.0, width, -1.0, 0.0},
+  obrect[3] = {0.0, width, height, height + 1.0}};
+                       
+  void showBg() {
+    background(255, 224, 224);
+  }
 }
 
 class Stage3 extends Stage{
+  void showBg() {
+    background(224, 255, 224);
+  }
 }
 
 class Stage4 extends Stage{
+  void showBg() {
+    background(224, 224, 255);
+  }
 }
 
 class Chara {
@@ -113,6 +131,8 @@ class Chara {
     life -= dam;
     if(life < 0) {
       life = 0;
+      playing = false;
+      chcol = color(128, 0, 0);
     }
   }
   
@@ -132,6 +152,7 @@ class Chara {
       if((0 <= cy - cd / 2 && stepy < 0) || (cy + cd / 2 <= height && stepy > 0)) {
         cy += stepy;
       }
+      
       if(cx - cd / 2 < 0) {
         cx = cd / 2;
       } else if(width < cx + cd / 2) {
@@ -164,11 +185,6 @@ class Chara {
     life = lifemax;
     playing = true;
   }
-  
-  void dead() {
-    playing = false;
-    chcol = color(128, 0, 0);
-  }
 }
 
 GameFlow gf = new GameFlow();
@@ -177,26 +193,29 @@ Stage[] st = new Stage[4];
 Chara ch = new Chara();
 
 void keyPressed() {
-  float step = 5.0;
-  if(keyCode == RIGHT) {
-    ch.move_chara(step, 0);
-  }
-  if(keyCode == LEFT) {
-    ch.move_chara(-step, 0);
-  }
-  if(keyCode == UP) {
-    ch.move_chara(0, -step);
-  }
-  if(keyCode == DOWN) {
-    ch.move_chara(0, step);
-  }
-  
-  for(int stage = 0; stage < 4; stage++) {
-    if(key == char(stage)) {
-      if(gf.nowTitle) {
-        gf.warpStage(stage);
+  char[] st = {'1', '2', '3', '4'};
+  if(gf.nowTitle) {
+    for(int i = 0; i < 4; i++) {
+      if(key == st[i]) {
+        gf.warpStage(i);
         init_game();
       }
+    }
+  }
+  
+  if(gf.nowGame) {
+    float step = 5.0;
+    if(keyCode == RIGHT) {
+      ch.move_chara(step, 0);
+    }
+    if(keyCode == LEFT) {
+      ch.move_chara(-step, 0);
+    }
+    if(keyCode == UP) {
+      ch.move_chara(0, -step);
+    }
+    if(keyCode == DOWN) {
+      ch.move_chara(0, step);
     }
   }
 }
@@ -228,7 +247,7 @@ void gameFailed() {
   askContinue();
 }
 
-void jud_safe() {
+void jud_safe(int st) {
   int i;
   float walls[][] = {{width, width + 1.0, 0.0, height},
                        {-1.0, 0.0, 0.0, height},
@@ -244,16 +263,12 @@ void jud_safe() {
   }
   
   for(i = 0; i < gf.deadCount(); i++) {
-    if(ch.ifsafe_elps(st[gf.nowStage].callBroken(i)) == false) {
+    if(ch.ifsafe_elps(st[gf.nowStage].callBrokenPoint(i)) == false) {
       ch.damage();
       if(ch.ifdead()) {
         break;
       }
     }
-  }
-  
-  if(ch.ifdead()) {
-    ch.dead();
   }
 }
 
@@ -273,14 +288,15 @@ void draw() {
     ti.display_title();
   } else if(gf.nowGame) {
     st[gf.nowStage].showBg();
+    
+    ch.draw_chara();
+    st[gf.nowStage].showBroken();
+    
     if(ch.ifdead()) {
       gameFailed();
     } else {
-      jud_safe();
+      jud_safe(gf.nowStage);
     }
-    ch.draw_chara();
-    st[gf.nowStage].showBroken();
   } else if(gf.nowClear) {
   }
 }
-
