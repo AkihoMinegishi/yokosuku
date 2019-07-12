@@ -45,8 +45,8 @@ class Title {
 
 abstract class Stage {
   int rectN, elpsN;
-  float[] obrect = new float[128][4];
-  float[] obelps = new float[128][4];
+  float[][] obrect = new float[128][4];
+  float[][] obelps = new float[128][4];
   float[] prex = new float[128], 
           prey = new float[128], 
           pred = new float[128];
@@ -83,8 +83,8 @@ class Stage1 extends Stage{
 class Stage2 extends Stage{
   obrect[0] = {width, width + 1.0, 0.0, height};
   obrect[1] = {-1.0, 0.0, 0.0, height};
-  obrect[2] = {0.0, width, -1.0, 0.0},
-  obrect[3] = {0.0, width, height, height + 1.0}};
+  obrect[2] = {0.0, width, -1.0, 0.0};
+  obrect[3] = {0.0, width, height, height + 1.0};
                        
   void showBg() {
     background(255, 224, 224);
