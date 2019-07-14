@@ -12,8 +12,7 @@ class Stage {
   int x_direction = -1;
   int y_direction = 0;
   int x_pos = 0;
-  int y_pos = 0;
-  
+  int y_pos = 0;  
   
   
   //コンストラクタ
