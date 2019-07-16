@@ -128,8 +128,15 @@ void jud_safe(int id) {
     }
   }
   
-  //collision_detection_BROKENs***********************************************************************************************************
-  
+  //collision_detection_BROKENs
+  for(i = 0; i < gf.getDeadCount(); i++) {
+    if(ch.ifsafe_elps(st[id].callBrokenCharaStatus(i)) == false) {
+      ch.damage();
+      if(ch.is_dead()) {
+        break;
+      }
+    }
+  }
  
 }
 //=================================================================================================//
