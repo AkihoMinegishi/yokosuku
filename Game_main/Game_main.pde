@@ -1,8 +1,16 @@
-/* memo
-  ステージ番号はゲームフローが記憶
-  残骸はステージが記憶
-  死亡数はゲームフローが記憶
-*/
+/**memo*************************************************
+  <構成>===========
+  Game_main
+    |-Title
+    |-Chara
+    |-GameFlow
+    |-Stage
+        |-Object
+  ================
+  
+  現在ステージ番号はゲームフローが記憶(gf.Stage_id)
+  死亡数はゲームフローが記憶(gf.deadCnt)
+********************************************************/
 GameFlow  gf = new GameFlow();
 Title     ti = new Title();
 Stage[]   st = new Stage[4];
@@ -23,7 +31,7 @@ void keyPressed() {
   }
 
   if(gf.Game) {                           //control_character==begin==
-    float step = 5.0;                       //
+    float step = 7.0;                       //
     if(keyCode == RIGHT) {                  //
       ch.move_chara(step, 0);               //
     }                                       //
@@ -100,15 +108,29 @@ void jud_safe(int id) {
     }
   }
 
-  //collision_detection_BROKENs
-  for(i = 0; i < gf.getDeadCount(); i++) {
-    if(ch.ifsafe_elps(st[id].callBrokenCharaStatus(i)) == false) {
+  //collision_detection_ELLIPSEs
+  for(i = 0; i < st[id].o.elps_num; i++) {
+    if(ch.ifsafe_elps(st[id].o.call_elps_status(i)) == false) {
       ch.damage();
       if(ch.is_dead()) {
         break;
       }
     }
   }
+ 
+  //collision_detection_RECTANGLEs
+  for(i = 0; i < st[id].o.rect_num; i++) {
+    if(ch.ifsafe_rect(st[id].o.call_rect_status(i)) == false) {
+      ch.damage();
+      if(ch.is_dead()) {
+        break;
+      }
+    }
+  }
+  
+  //collision_detection_BROKENs***********************************************************************************************************
+  
+ 
 }
 //=================================================================================================//
 
@@ -119,6 +141,9 @@ void setup() {
   st[2] = new Stage3();
   st[3] = new Stage4();
   ch.init_chara();
+  for(int i = 0; i < 4; i++) {
+      st[i].set_obj();           //Stage:set_objects
+  }
 }
 
 void draw() {
@@ -126,12 +151,14 @@ void draw() {
     ti.display_title();                    //Title:display_title    
   } else if(gf.Game) {                 //state:game
     st[gf.Stage_id].showBg();              //Stage:draw_stage_background
+    st[gf.Stage_id].display();
     ch.draw_chara();                       //Chara:draw_character
     st[gf.Stage_id].drawBrokenChara();     //Stage:draw_broken_character
     if(ch.is_dead()) {                  //(hp < 0)
       gameFailed();                       //print_message_"you lose" and ask_continue
     } else {
       jud_safe(gf.Stage_id);              //collision_detection
+      
     }
   } else if(gf.Clear) { 
                                           //*under construction*

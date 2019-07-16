@@ -1,9 +1,42 @@
+/****************************************************************
+methods::
+ init_chara:         initialize_chara
+ draw_chara:
+ 
+ chara_is_in_window: collision_detection_WALLs
+ ifsafe_elps:        collision_detection_ELLIPSEs
+ ifsafe_rect:        collision_detection_RECTANGLEs
+ 
+ damage:             decrease_life
+ is_dead:            is_chara_dead?
+ 
+ move_chara:
+ warp_chara:
+*****************************************************************/
 class Chara {
   float cx, cy, cd = 30.0, cr = cd / 2.0;
   int lifemax = 3, life = 3, dam = 3;
   color chcol;
   boolean playing = true;
+
+  void init_chara() {
+    cx = width / 2;
+    cy = height / 2;
+    chcol = color(128, 255, 0);
+    life = lifemax;
+    playing = true;
+  }
   
+  void draw_chara() {
+    fill(chcol);
+    pushMatrix();
+    ellipse(cx, cy, cd, cd);
+    popMatrix();
+  }
+  
+//=================================================================================================//
+//collision_detection//
+//===================//
   boolean chara_is_in_window(float area[]) {
     if(area[0] <= cx + cd / 2 && cx - cd / 2 <= area[1] 
        && area[2] <= cy + cd / 2 && cy - cd / 2 <= area[3]) {
@@ -22,7 +55,22 @@ class Chara {
       return true;
     }
   }
+  boolean ifsafe_rect(float status[]) {
+    float rx = status[0], ry = status[1], rw = status[2], rh = status[3];
+    if(rx <= cx + cd/2 && cx - cd/2 <= rx + rw &&
+       ry <= cy + cd/2 && cy - cd/2 <= ry + rh) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+  
+//=================================================================================================//
 
+
+//=================================================================================================//
+//      //
+//======//
   void damage() {
     life -= dam;
     if(life < 0) {
@@ -39,7 +87,13 @@ class Chara {
       return false;
     }
   }
+//=================================================================================================//
 
+
+  
+//=================================================================================================//
+//cahra-move-processing//
+//====================//
   void move_chara(float stepx, float stepy) {
     if(playing) {
       if((0 <= cx - cd / 2 && stepx < 0) || (cx + cd / 2 <= width && stepx > 0)) {
@@ -68,16 +122,5 @@ class Chara {
     }
   }
   
-  void draw_chara() {
-    fill(chcol);
-    ellipse(cx, cy, cd, cd);
-  }
-
-  void init_chara() {
-    cx = width / 2;
-    cy = height / 2;
-    chcol = color(128, 255, 0);
-    life = lifemax;
-    playing = true;
-  }
+//=================================================================================================//  
 }

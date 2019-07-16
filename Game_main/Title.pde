@@ -3,7 +3,7 @@ class Title {
   void display_title() {
     background(0,0,0);
     textSize(48);
-    text("I WANNA (ry"             ,100, 100);
+    text("Yokosuku"             ,100, 100);
     textSize(24);
     text("How to play -press H"    ,150, 200);
     text("Game start"              ,150, 250);

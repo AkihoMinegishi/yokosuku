@@ -6,4 +6,6 @@ class Stage2 extends Stage{
 
   }
 
+  void set_obj() {
+  }
 }

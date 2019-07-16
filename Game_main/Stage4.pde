@@ -5,5 +5,8 @@ class Stage4 extends Stage{
     background(224, 224, 255);
 
   }
+  
+  void set_obj() {
+  }
 
 }

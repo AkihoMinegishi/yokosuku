@@ -1,14 +1,13 @@
-/*
-
+/****************************************************************
 boolean pressedEnter:???
 
 methods::
- init:set_flags
- move_to_stage_i:move_to_stage_i          * i_is_stage_number
- dead:deadCnt++
- getDeadCount:get_deadCnt
- allClear:when_clear(no_if)
-*/
+ init:             set_flags
+ move_to_stage_i:  move_to_stage_i          * i_is_stage_number
+ increase_deadCnt: deadCnt++
+ getDeadCount:     get_deadCnt
+ allClear:         when_clear(*under_construction*)
+*****************************************************************/
 class GameFlow {
   boolean Title, Game, Clear, pressedEnter; //judge statement
   int Stage_id = 0; //stage number
