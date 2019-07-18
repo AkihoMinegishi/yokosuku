@@ -5,8 +5,7 @@ class Chara {
   boolean playing = true;
 
   void init_chara() {
-    cx = width / 8;
-    cy = height / 2;
+    warp_chara(width / 8, height / 2);
     chcol = color(128, 255, 0);
     life = lifemax;
     playing = true;
@@ -40,6 +39,7 @@ class Chara {
       return true;
     }
   }
+  
   boolean ifsafe_rect(float status[]) {
     float rx = status[0], ry = status[1], rw = status[2], rh = status[3];
     if(rx <= cx + cd/2 && cx - cd/2 <= rx + rw &&
@@ -101,10 +101,8 @@ class Chara {
   }
 
   void warp_chara(float dx, float dy) {
-    if(playing) {
-      cx = dx;
-      cy = dy;
-    }
+    cx = dx;
+    cy = dy;
   }
   
 //=================================================================================================//  

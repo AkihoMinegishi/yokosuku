@@ -19,12 +19,18 @@ abstract class Stage {
     x_direction :x軸のスクロール方向
     y_direction :y軸のスクロール方向
   ====================================*/
-  float x_pos = 0;
-  float y_pos = 0;  
-  int dx = 2;
-  int dy = 1;
-  int x_direction = -1;
-  int y_direction = 0;
+  float x_pos, y_pos;
+  int dx, dy;
+  int x_direction, y_direction;
+  
+  void init_stage() {
+    x_pos  = 0;
+    y_pos = 0;
+    dx = 2;
+    dy = 1;
+    x_direction = -1;
+    y_direction = 0;
+  }
   
   //自動スクロールの方向変更
   void change_scroll_direction(int id) {
@@ -32,6 +38,12 @@ abstract class Stage {
     int[] y_directions = { 0, 1, 1, 1, 0,-1,-1, 1};
     x_direction = x_directions[id];
     y_direction = y_directions[id];
+  }
+  
+  //stop all abjects
+  void stop_stage() {
+    dx = 0;
+    dy = 0;
   }
   
   void display() {
@@ -45,6 +57,7 @@ abstract class Stage {
     y_pos += dy * y_direction;
   }
   
+  abstract boolean ifClear();   //whethere reached the goal or not
   
   abstract void showBg();       //show_background
   
@@ -77,6 +90,14 @@ abstract class Stage {
   float[] callBrokenCharaStatus(int i) {
     float sets[] = {prex[i], prey[i], pred[i], pred[i]};
     return sets;
+  }
+  
+  //reset broken
+  void reset_broken() {
+    for(int i = 0; i < precnt; i++) {
+      prex[i] = prey[i] = pred[i] = 0;
+    }
+    precnt = 0;
   }
 //=================================================================================================//
 
