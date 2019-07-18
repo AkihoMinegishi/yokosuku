@@ -22,7 +22,7 @@ abstract class Stage {
   float x_pos, y_pos;
   int dx, dy;
   int x_direction, y_direction;
-  color object_col, broken_col;
+  color object_col, broken_col, goal_col;
   
   void init_stage() {
     x_pos  = 0;
@@ -33,6 +33,7 @@ abstract class Stage {
     y_direction = 0;
     object_col = color(0, 100, 130);
     broken_col = color(128, 0, 0);
+    goal_col = color(255, 255, 128);
   }
   
   //自動スクロールの方向変更
@@ -52,19 +53,24 @@ abstract class Stage {
   void object_white_out() {
     object_col = broken_col = color(240, 240, 240);
   }
-  
+
   void display() {
-    fill(object_col);
     pushMatrix();             //元描画座標軸の保管
     translate(x_pos, y_pos);  //描画座標軸の変換
+    
+    noStroke();
+    fill(goal_col);
+    o.draw_goal();
+    stroke(0);
+    
+    fill(object_col);
     o.draw_elps();
     o.draw_rect();
+    
     popMatrix();              //元描画座標軸の呼び出し
     x_pos += dx * x_direction;
     y_pos += dy * y_direction;
   }
-  
-  abstract boolean ifClear();   //whethere reached the goal or not
   
   abstract void showBg();       //show_background
   

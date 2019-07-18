@@ -1,14 +1,4 @@
 class Stage2 extends Stage{
-  float x_goal = 9999999.0;
-  float y_goal = 9999999.0;
-  
-  boolean ifClear() {
-    if(x_pos * -1 == x_goal && y_pos * -1 == y_goal) {
-      return true;
-    } else {
-      return false;
-    }
-  }
 
   void showBg() {
     background(255, 224, 224);
@@ -32,5 +22,8 @@ class Stage2 extends Stage{
     o.set_elps( 900,    0, 250, 250);
     o.set_elps(1200,  220, 350, 300);
     o.set_elps(1540,    0, 300, 250);
+    
+    //goal
+    o.set_goal(999999.0, 999999.0, width, height);
   }
 }
