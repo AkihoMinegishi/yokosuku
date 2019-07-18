@@ -38,8 +38,15 @@ class GameFlow {
   }
 
   //move to the end of the game
-  void allClear() {
+  void stageClear() {
     Clear = true;
     Title = Game = false;
   }
+  
+  //back to the title
+  void back_title() {
+    Title = true;
+    Game = Clear = false;
+  }
+  
 }

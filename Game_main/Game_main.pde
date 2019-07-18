@@ -15,7 +15,8 @@ Chara     ch = new Chara();
 //=================================================================================================//
 //key_cotrol//
 //==========//
-boolean up, down, left, right, show_htp = false;
+boolean up, down, left, right;
+boolean show_htp = false, ask_retry = false, ask_go_title = false;
 void keyPressed() {
   char[] st = {'1', '2', '3', '4'};
   if(gf.Title) {
@@ -28,7 +29,7 @@ void keyPressed() {
       }
     }
     
-    if(key == 'h') {
+    if(key == 'h' || key == 'H') {
       show_htp = true;
     }
     if(show_htp && keyCode == ENTER) {
@@ -36,13 +37,24 @@ void keyPressed() {
     }
   }
   
-  if(gf.Game == true) {               //about_control_character==begin==
+  if(gf.Game == true) {        
+    //about_control_character==begin==
     if(keyCode == RIGHT) right = true;      //
     if(keyCode == LEFT)  left = true;       //
     if(keyCode == UP)    up = true;         //
     if(keyCode == DOWN)  down = true;       //
+    //about_control_character===end===
+    
+    if(ch.is_dead() && (key == 'r' || key == 'R')) {
+      ask_retry = true;
+    }
   }
-  //about_control_character===end===
+  
+  if((gf.Game == true && ch.is_dead()) || gf.Clear == true) {
+    if(key == 't' || key == 'T') {
+      ask_go_title = true;
+    }
+  }
 }
 
 
@@ -72,21 +84,51 @@ void showMessage(String mes, int strsize, int strX, int strY) {
 
 
 //=================================================================================================//
-//Game_fail_processing//
+//Game_clear_and_fail_processing//
 //====================//
-void askContinue() {
-  showMessage("PRESS 'R' TO PLAY AGAIN", 16, width / 2, height / 2 + 24);
-  if(keyPressed && (key == 'r' || key == 'R')) {
+void askRetry() {
+  if(ask_retry) {
     gf.increase_deadCnt();                                                //GameFlow:deadCnt++
     st[gf.Stage_id].inputBrokenCharaStatus(ch.cx, ch.cy, ch.cd);          //Stage:memorize_chara's_broken_point
+    st[gf.Stage_id].init_stage();
     ch.init_chara();                                                      //Chara:init_character
+    ask_retry = false;
+  }
+}
+
+void askGoTitle() {
+  if(ask_go_title) {
+    st[gf.Stage_id].reset_broken();
+    st[gf.Stage_id].init_stage();
+    ch.init_chara();
+    gf.back_title();
+    ask_go_title = false;
   }
 }
 
 void gameFailed() {
+  showMessage("PRESS 'R' TO PLAY AGAIN", 16, width / 2 - 100, height / 2 + 34);
+  showMessage("PRESS 'T' TO BACK TO TITLE", 16, width / 2 - 100, height / 2 + 58);
+  st[gf.Stage_id].stop_stage();
   ch.playing = false;
-  showMessage("You Lose :(", 28, width / 2, height / 2);
-  askContinue();
+  showMessage("You Lose :(", 28, width / 2 - 70, height / 2 - 34);
+  askRetry();
+  askGoTitle();
+}
+
+void gameCleared() { 
+  background(255, 255, 128);
+  showMessage("PRESS 'T' TO BACK TO TITLE", 16, width / 2 - 110, height / 2 + 34);
+  ch.playing = false;
+  showMessage("Stage Cleared!!!!!", 28, width / 2 - 110, height / 2 - 34);
+  askGoTitle();
+}
+
+void white_out() {
+  if(gf.Stage_id > 0) {
+    st[gf.Stage_id].object_white_out();
+    ch.chara_white_out();
+  }
 }
 //=================================================================================================//
 
@@ -139,7 +181,8 @@ void jud_safe(int id) {
       }
     }
   }
-
+  
+  //collision_detection_BROKEN_CHARAs
   for(i = 0; i < gf.getDeadCount(); i++) {
     if(ch.ifsafe_elps(st[id].callBrokenCharaStatus(i)) == false) {
       ch.damage();
@@ -180,7 +223,8 @@ void setup() {
   st[3] = new Stage4();
   ch.init_chara();
   for(int i = 0; i < 4; i++) {
-      st[i].set_obj();           //Stage:set_objects
+    st[i].init_stage();
+    st[i].set_obj();           //Stage:set_objects
   }
   
   
@@ -202,6 +246,7 @@ void setup() {
   
 }
 
+int num = 0;
 void draw() {
   if(gf.Title) {                       //state:title
     ti.display_title();                //Title:display_title
@@ -263,18 +308,20 @@ void draw() {
       control_character();
       ch.draw_chara();                       //Chara:draw_character
       st[gf.Stage_id].drawBrokenChara();     //Stage:draw_broken_character
-      println(st[gf.Stage_id].o.rect_num);
       if(ch.is_dead()) {                  //(hp < 0)
+        white_out();                        //white out
         gameFailed();                       //print_message_"you lose" and ask_continue
       } else {
         jud_safe(gf.Stage_id);              //collision_detection       
       }
+      if(st[gf.Stage_id].ifClear()) {
+        gf.stageClear();
+      }
     }
     
     
-    
+
   } else if(gf.Clear) { 
-                                            //*under construction*
-   
+    gameCleared();                          //print_message_"game cleared" and ask_continue
   }
 }

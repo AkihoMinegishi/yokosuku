@@ -19,12 +19,21 @@ abstract class Stage {
     x_direction :x軸のスクロール方向
     y_direction :y軸のスクロール方向
   ====================================*/
-  float x_pos = 0;
-  float y_pos = 0;  
-  int dx = 2;
-  int dy = 1;
-  int x_direction = -1;
-  int y_direction = 0;
+  float x_pos, y_pos; 
+  int dx, dy;
+  int x_direction, y_direction;
+  color object_col, broken_col;
+  
+  void init_stage() {
+    x_pos = 0;
+    y_pos = 0;
+    dx = 2;
+    dy = 1;
+    x_direction = -1;
+    y_direction = 0;
+    object_col = color(0, 100, 130);
+    broken_col = color(128, 0, 0);
+  }
   
   //自動スクロールの方向変更
   void change_scroll_direction(int id) {
@@ -34,8 +43,18 @@ abstract class Stage {
     y_direction = y_directions[id];
   }
   
+  //stop all objects
+  void stop_stage() {
+    dx = 0;
+    dy = 0;
+  }
+  
+  void object_white_out() {
+    object_col = broken_col = color(240, 240, 240);
+  }
+  
   void display() {
-    fill(0,100,130);
+    fill(object_col);
     pushMatrix();             //元描画座標軸の保管
     translate(x_pos, y_pos);  //描画座標軸の変換
     o.draw_elps();
@@ -45,6 +64,7 @@ abstract class Stage {
     y_pos += dy * y_direction;
   }
   
+  abstract boolean ifClear();      //whether reached the goal or not
   
   abstract void showBg();       //show_background
   
@@ -61,7 +81,7 @@ abstract class Stage {
 
   void drawBrokenChara() {
     for(int i = 0; i < precnt; i++) {
-      fill(128, 0, 0);
+      fill(broken_col);
       ellipse(prex[i], prey[i], pred[i], pred[i]);
     }
   }
@@ -77,6 +97,14 @@ abstract class Stage {
   float[] callBrokenCharaStatus(int i) {
     float sets[] = {prex[i], prey[i], pred[i], pred[i]};
     return sets;
+  }
+  
+  //reset broken
+  void reset_broken() {
+    for(int i = 0; i < precnt; i++) {
+      prex[i] = prey[i] = pred[i] = 0;
+    }
+    precnt = 0;
   }
 //=================================================================================================//
 
