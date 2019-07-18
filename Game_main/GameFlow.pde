@@ -1,34 +1,45 @@
+/*
+boolean pressedEnter:???
+methods::
+ init:set_flags
+ move_to_stage_i:move_to_stage_i          * i_is_stage_number
+ dead:deadCnt++
+ getDeadCount:get_deadCnt
+ allClear:when_clear(no_if)
+*/
 class GameFlow {
-  boolean nowTitle, nowGame, nowClear, pressedEnter; //judge statement
-  int nowStage = 0; //stage number
-  int diecnt = 0; //counting death(reseted by moving stage)
-  
+  boolean Title, Game, Clear, pressedEnter; //judge statement
+  int Stage_id = 1; //stage number
+  int deadCnt = 0; //counting death(reseted by moving stage)
+
   GameFlow() {
-    nowTitle = true;
-    nowGame = nowClear = false;
+    Title = true;
+    Game  = false;
+    Clear = false;
   }
-  
+
   //reset die count and warp stage
-  void warpStage(int dir) {
-    nowStage = dir;
-    diecnt = 0;
-    nowGame = true;
-    nowTitle = nowClear = false;
+  void move_to_stage_i(int i) {
+    Stage_id = i;
+    //init
+    deadCnt = 0;
+    Game = true;
+    Title = Clear = false;
   }
-  
+
   //+1 die count
-  void dead() {
-    diecnt++;
-  }
-  
+  void increase_deadCnt() {
+    deadCnt++;
+  } 
+
   //get die count
-  int deadCount() {
-    return diecnt;
+  int getDeadCount() {
+    return deadCnt;
   }
-  
+
   //move to the end of the game
   void allClear() {
-    nowClear = true;
-    nowTitle = nowGame = false;
+    Clear = true;
+    Title = Game = false;
   }
 }

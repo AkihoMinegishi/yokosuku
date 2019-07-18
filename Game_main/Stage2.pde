@@ -1,10 +1,26 @@
 class Stage2 extends Stage{
-  obrect[0] = {width, width + 1.0, 0.0, height};
-  obrect[1] = {-1.0, 0.0, 0.0, height};
-  obrect[2] = {0.0, width, -1.0, 0.0};
-  obrect[3] = {0.0, width, height, height + 1.0};
-                       
+
   void showBg() {
     background(255, 224, 224);
+  }
+
+
+  //size(600, 400)
+
+
+  void set_obj() {
+    //            x     y width height
+    o.set_rect(   0,  220, 3000,  200); //floor
+    //down_wall
+    o.set_rect( 900,  170,  130,   50);
+    
+    //up_rect
+    o.set_rect(   0,    0,  700,  170);
+    o.set_rect( 700,    0,  200,  125);
+    
+    //elps
+    o.set_elps( 900,    0, 250, 250);
+    o.set_elps(1200,  220, 350, 300);
+    o.set_elps(1540,    0, 300, 250);
   }
 }
