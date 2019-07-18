@@ -5,7 +5,7 @@ class Chara {
   boolean playing = true;
 
   void init_chara() {
-    cx = width / 2;
+    cx = width / 8;
     cy = height / 2;
     chcol = color(128, 255, 0);
     life = lifemax;

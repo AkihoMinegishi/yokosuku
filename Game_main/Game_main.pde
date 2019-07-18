@@ -15,38 +15,45 @@ Chara     ch = new Chara();
 //=================================================================================================//
 //key_cotrol//
 //==========//
+boolean up, down, left, right, show_htp = false;
 void keyPressed() {
   char[] st = {'1', '2', '3', '4'};
   if(gf.Title) {
-    for(int i = 0; i < 4; i++) {
-      if(key == st[i]) {
-        gf.move_to_stage_i(i);            //GameFlow:move_to_stage_i      * i_is_stage_number
-        ch.init_chara();                  //Chara:init_character
+    if(show_htp == false) {
+      for(int i = 0; i < 4; i++) {
+        if(key == st[i]) {
+          gf.move_to_stage_i(i);            //GameFlow:move_to_stage_i      * i_is_stage_number
+          ch.init_chara();                  //Chara:init_character
+        }
       }
+    }
+    
+    if(key == 'h') {
+      show_htp = true;
+    }
+    if(show_htp && keyCode == ENTER) {
+      show_htp = false;
     }
   }
   
-  if(true) {                           //control_character==begin==
-    float step = 9.0;                       //キャラの移動距離
-    if(keyCode == RIGHT) {                  //
-      ch.move_chara(step, 0);               //
-    }                                       //
-    if(keyCode == LEFT) {                   //
-      ch.move_chara(-step, 0);              //
-    }                                       //
-    if(keyCode == UP) {                     //
-      ch.move_chara(0, -step);              //
-    }                                       //
-    if(keyCode == DOWN) {                   //
-      ch.move_chara(0, step);               //
-    }                                       //
+  if(gf.Game == true) {               //about_control_character==begin==
+    if(keyCode == RIGHT) right = true;      //
+    if(keyCode == LEFT)  left = true;       //
+    if(keyCode == UP)    up = true;         //
+    if(keyCode == DOWN)  down = true;       //
   }
-  //control_character===end===
+  //about_control_character===end===
 }
 
 
 void keyReleased() {
-
+  if(gf.Game == true) {               //about_control_character==begin==
+    if(keyCode == RIGHT) right = false;     //
+    if(keyCode == LEFT)  left = false;      //
+    if(keyCode == UP)    up = false;        //
+    if(keyCode == DOWN)  down = false;      //
+  }
+  //about_control_character===end===
 }
 //=================================================================================================//
 
@@ -84,6 +91,14 @@ void gameFailed() {
 //=================================================================================================//
 
 
+
+void control_character() {
+  float step = 3.0;
+  if(right == true) ch.move_chara(step, 0);
+  if(left == true) ch.move_chara(-step, 0);
+  if(up == true) ch.move_chara(0, -step);
+  if(down == true) ch.move_chara(0, step);
+}
 
 //=================================================================================================//
 //collision_detection//
@@ -124,8 +139,7 @@ void jud_safe(int id) {
       }
     }
   }
-  /*
-  //CD_BROKENs
+
   for(i = 0; i < gf.getDeadCount(); i++) {
     if(ch.ifsafe_elps(st[id].callBrokenCharaStatus(i)) == false) {
       ch.damage();
@@ -134,10 +148,29 @@ void jud_safe(int id) {
       }
     }
   }
-  */
  
 }
 //=================================================================================================//
+
+//====================================================================
+//  stage3  //
+//==========//
+////////////////////stage3///////////////////////////
+float deg,deg2 = 0;
+PImage img,img2;
+Enemy e;
+PrePlayer p;
+Stage3_draw s3;
+Title t;
+
+float xP,yP;
+float time= 0;
+float mx = 0;
+float my = 0;
+//////////////////////////////////////////////////////
+//====================================================================
+
+
 
 void setup() {
   size(600, 400);//
@@ -149,24 +182,99 @@ void setup() {
   for(int i = 0; i < 4; i++) {
       st[i].set_obj();           //Stage:set_objects
   }
+  
+  
+  ///////////////////stage3////////////////////////////
+  xP = 10;
+  yP = 600;
+  time = 0;
+  p = new PrePlayer();
+  e = new Enemy();
+  s3 = new Stage3_draw();
+  e.setE(100);
+  //img = loadImage("2970.png");
+  //img2 = loadImage("2970.png");
+  //img.resize(img.width/5,img.height/5);
+  //img2.resize(img2.width/3,img2.height/3);
+  frameRate(60);
+  ///////////////////////////////////////////////////////
+  
+  
 }
 
 void draw() {
   if(gf.Title) {                       //state:title
-    ti.display_title();                    //Title:display_title    
-  } else if(gf.Game) {                 //state:game
-    st[gf.Stage_id].showBg();              //Stage:draw_stage_background
-    st[gf.Stage_id].display();
-    ch.draw_chara();                       //Chara:draw_character
-    st[gf.Stage_id].drawBrokenChara();     //Stage:draw_broken_character
-    println(st[gf.Stage_id].o.rect_num);
-    if(ch.is_dead()) {                  //(hp < 0)
-      gameFailed();                       //print_message_"you lose" and ask_continue
-    } else {
-      jud_safe(gf.Stage_id);              //collision_detection
-      
+    ti.display_title();                //Title:display_title
+    if(show_htp == true) {             
+      ti.display_how_to_play();        //Title:display_how_to_play
     }
+  } else if(gf.Game) {                 //state:game
+  
+  
+    //////////////////////////////////////////////////////////////////////////////////////////////////
+    if(gf.Stage_id == 2) {
+      //title画面から3を選ぶと////
+      changeWindowSize(600, 700);
+      println(time);
+      time++;
+      if(time%4000 > 100 && time%2000 < 450){
+        mx-=0.5;my+=1.0;
+      }else if(time%2200 > 600 && time%2200 < 1000){
+        mx+=1;
+      }else if(time%2200 > 1100 && time%2200 < 1500){
+        mx+=0.5;my-=0.5;
+      }else if(time%2000 > 1550 && time%2200 < 1950){
+        mx-=1;my-=0.5;
+      }else if(time%2200 > 2000 && time%2200 < 2199){
+      }
+      translate(mx,my);
+      fill(200);
+      s3.drawStage(mx,my);
+      p.drawMe();
+      p.move();
+      p.preMe();
+      e.drawE(100);
+      hit(e.enemyHit(xP,yP));
+      hit(stageHit(xP,yP));
+      e.preEHit();
+      hit(p.preMHit(xP,yP));
+      println(preN);
+      pushMatrix();
+      fill(0,0,255);
+      textSize(100);
+      text(time,-100,0);
+      if(time > 2300){
+        textSize(100);
+        text("Clear!",500,0);
+        text("RETRY:",500,100);
+        text(preN,500,200);
+        noLoop();
+      }
+      popMatrix();
+    } else  {//////////////////////////////////////////////////////////////////////////////////////////////  
+    
+  
+  
+  
+  
+  
+      st[gf.Stage_id].showBg();              //Stage:draw_stage_background  
+      st[gf.Stage_id].display();
+      control_character();
+      ch.draw_chara();                       //Chara:draw_character
+      st[gf.Stage_id].drawBrokenChara();     //Stage:draw_broken_character
+      println(st[gf.Stage_id].o.rect_num);
+      if(ch.is_dead()) {                  //(hp < 0)
+        gameFailed();                       //print_message_"you lose" and ask_continue
+      } else {
+        jud_safe(gf.Stage_id);              //collision_detection       
+      }
+    }
+    
+    
+    
   } else if(gf.Clear) { 
-                                          //*under construction*
+                                            //*under construction*
+   
   }
 }

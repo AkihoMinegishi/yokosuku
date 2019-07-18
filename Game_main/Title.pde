@@ -7,10 +7,10 @@ class Title {
     textSize(24);
     text("How to play -press H"    ,150, 200);
     text("Game start"              ,150, 250);
-    text("     tutorial    -press 0"    ,150, 275);
-    text("     stage1     -press 1"    ,150, 300);
-    text("     stage2     -press 2"    ,150, 325);
-    text("     stage3     -press 3"    ,150, 350);
+    text("     tutorial    -press 1"    ,150, 275);
+    text("     stage1     -press 2"    ,150, 300);
+    text("     stage2     -press 3"    ,150, 325);
+    text("     stage3     -press 4"    ,150, 350);
 
   }
 

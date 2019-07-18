@@ -2,7 +2,6 @@
 methods::
  relate_child_class:
    [abstract_method]showBg:show_background
-
  un-relate_child_class:
    drawBrokenChara:draw_broken_characters
    inputBrokenCharaStatus:memorize_character's_broken_point_as_matrix
