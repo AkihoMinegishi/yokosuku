@@ -18,6 +18,7 @@ class Stage2 extends Stage{
     //up_rect
     o.set_rect(   0,    0,  700,  170);
     o.set_rect( 700,    0,  200,  125);
+    o.set_rect(2400,    0,  width,  height);
     
     //elps
     o.set_elps( 900,    0, 250, 250);
@@ -31,6 +32,6 @@ class Stage2 extends Stage{
     }
     
     //goal
-    o.set_goal(999999.0, 999999.0, width, height);
+    o.set_goal(2200, 0, width, height);
   }
 }
