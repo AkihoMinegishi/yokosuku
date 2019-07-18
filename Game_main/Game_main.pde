@@ -125,8 +125,10 @@ void gameCleared() {
 }
 
 void white_out() {
-  st[gf.Stage_id].object_white_out();
-  ch.chara_white_out();
+  if(gf.Stage_id > 0) {
+    st[gf.Stage_id].object_white_out();
+    ch.chara_white_out();
+  }
 }
 //=================================================================================================//
 
@@ -224,7 +226,6 @@ void draw() {
       gameFailed();                        //print_message_"you lose" and ask_continue
     } else {
       jud_safe(gf.Stage_id);               //collision_detection
-      
     }
     if(st[gf.Stage_id].ifClear()) {       //Stage:when reach the goal
       gf.stageClear();
