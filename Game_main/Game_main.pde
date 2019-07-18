@@ -15,19 +15,28 @@ Chara     ch = new Chara();
 //=================================================================================================//
 //key_cotrol//
 //==========//
-boolean up, down, left, right;
+boolean up, down, left, right, show_htp = false;
 void keyPressed() {
   char[] st = {'1', '2', '3', '4'};
   if(gf.Title) {
-    for(int i = 0; i < 4; i++) {
-      if(key == st[i]) {
-        gf.move_to_stage_i(i);            //GameFlow:move_to_stage_i      * i_is_stage_number
-        ch.init_chara();                  //Chara:init_character
+    if(show_htp == false) {
+      for(int i = 0; i < 4; i++) {
+        if(key == st[i]) {
+          gf.move_to_stage_i(i);            //GameFlow:move_to_stage_i      * i_is_stage_number
+          ch.init_chara();                  //Chara:init_character
+        }
       }
+    }
+    
+    if(key == 'h') {
+      show_htp = true;
+    }
+    if(show_htp && keyCode == ENTER) {
+      show_htp = false;
     }
   }
   
-  if(/*GameFlow.Game == */true) {               //about_control_character==begin==
+  if(gf.Game == true) {               //about_control_character==begin==
     if(keyCode == RIGHT) right = true;      //
     if(keyCode == LEFT)  left = true;       //
     if(keyCode == UP)    up = true;         //
@@ -38,7 +47,7 @@ void keyPressed() {
 
 
 void keyReleased() {
-  if(/*GameFlow.Game == */true) {               //about_control_character==begin==
+  if(gf.Game == true) {               //about_control_character==begin==
     if(keyCode == RIGHT) right = false;     //
     if(keyCode == LEFT)  left = false;      //
     if(keyCode == UP)    up = false;        //
@@ -157,7 +166,10 @@ void setup() {
 
 void draw() {
   if(gf.Title) {                       //state:title
-    ti.display_title();                    //Title:display_title    
+    ti.display_title();                //Title:display_title
+    if(show_htp == true) {             
+      ti.display_how_to_play();        //Title:display_how_to_play
+    }
   } else if(gf.Game) {                 //state:game
     st[gf.Stage_id].showBg();              //Stage:draw_stage_background
     st[gf.Stage_id].display();
