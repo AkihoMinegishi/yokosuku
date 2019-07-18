@@ -2,6 +2,7 @@ class Title {
 
   void display_title() {
     background(0, 0, 0);
+    fill(255);
     textSize(48);
     text("I WANNA (ry"             ,100, 100);
     textSize(24);
@@ -16,6 +17,7 @@ class Title {
 
   void display_how_to_play() {
     background(0, 0, 0);
+    fill(255);
     textSize(24);
     text("move your chara"     ,width/5, height*1/9);
     text("up       -press UP"  ,width/5, height*2/9);
