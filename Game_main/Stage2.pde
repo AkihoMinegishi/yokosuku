@@ -4,6 +4,10 @@ class Stage2 extends Stage{
     background(255, 224, 224);
   }
 
+  void events() {
+  //change_scroll_direction_and_speed(x_pt, y_pt, new_dx, new_dy, x_dir, y_dir);
+    change_scroll_direction_and_speed(0.0,  0.0,  2.0,    0.0,    -1,    0);
+  }
 
   //size(600, 400)
 
