@@ -22,6 +22,7 @@ abstract class Stage {
   float x_pos, y_pos;
   int dx, dy;
   int x_direction, y_direction;
+  color object_col, broken_col;
   
   void init_stage() {
     x_pos  = 0;
@@ -30,6 +31,8 @@ abstract class Stage {
     dy = 1;
     x_direction = -1;
     y_direction = 0;
+    object_col = color(0, 100, 130);
+    broken_col = color(128, 0, 0);
   }
   
   //自動スクロールの方向変更
@@ -46,8 +49,12 @@ abstract class Stage {
     dy = 0;
   }
   
+  void object_white_out() {
+    object_col = broken_col = color(240, 240, 240);
+  }
+  
   void display() {
-    fill(0,100,130);
+    fill(object_col);
     pushMatrix();             //元描画座標軸の保管
     translate(x_pos, y_pos);  //描画座標軸の変換
     o.draw_elps();
@@ -74,7 +81,7 @@ abstract class Stage {
 
   void drawBrokenChara() {
     for(int i = 0; i < precnt; i++) {
-      fill(128, 0, 0);
+      fill(broken_col);
       ellipse(prex[i], prey[i], pred[i], pred[i]);
     }
   }

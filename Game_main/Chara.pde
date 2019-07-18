@@ -11,6 +11,10 @@ class Chara {
     playing = true;
   }
   
+  void chara_white_out() {
+    chcol = color(240, 240, 240);
+  }
+  
   void draw_chara() {
     fill(chcol);
     pushMatrix();

@@ -123,6 +123,11 @@ void gameCleared() {
   showMessage("Stage Cleared!!!!!", 28, width / 2 - 110, height / 2 - 34);
   askGoTitle();
 }
+
+void white_out() {
+  st[gf.Stage_id].object_white_out();
+  ch.chara_white_out();
+}
 //=================================================================================================//
 
 
@@ -215,6 +220,7 @@ void draw() {
     st[gf.Stage_id].drawBrokenChara();     //Stage:draw_broken_character
     //println(st[gf.Stage_id].o.rect_num);
     if(ch.is_dead()) {                     //(hp < 0)
+      white_out();                         //white out
       gameFailed();                        //print_message_"you lose" and ask_continue
     } else {
       jud_safe(gf.Stage_id);               //collision_detection
