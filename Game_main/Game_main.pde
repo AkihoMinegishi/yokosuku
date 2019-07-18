@@ -1,16 +1,12 @@
-/**memo*************************************************
-  <構成>===========
+/* memo
   Game_main
-    |-Title
     |-Chara
     |-GameFlow
+    |-Object
     |-Stage
-        |-Object
-  ================
-  
   現在ステージ番号はゲームフローが記憶(gf.Stage_id)
   死亡数はゲームフローが記憶(gf.deadCnt)
-********************************************************/
+*/
 GameFlow  gf = new GameFlow();
 Title     ti = new Title();
 Stage[]   st = new Stage[4];
@@ -29,9 +25,9 @@ void keyPressed() {
       }
     }
   }
-
-  if(gf.Game) {                           //control_character==begin==
-    float step = 7.0;                       //
+  
+  if(true) {                           //control_character==begin==
+    float step = 9.0;                       //キャラの移動距離
     if(keyCode == RIGHT) {                  //
       ch.move_chara(step, 0);               //
     }                                       //
@@ -44,7 +40,8 @@ void keyPressed() {
     if(keyCode == DOWN) {                   //
       ch.move_chara(0, step);               //
     }                                       //
-  }                                       //control_character===end===
+  }
+  //control_character===end===
 }
 
 
@@ -127,8 +124,8 @@ void jud_safe(int id) {
       }
     }
   }
-  
-  //collision_detection_BROKENs
+  /*
+  //CD_BROKENs
   for(i = 0; i < gf.getDeadCount(); i++) {
     if(ch.ifsafe_elps(st[id].callBrokenCharaStatus(i)) == false) {
       ch.damage();
@@ -137,12 +134,13 @@ void jud_safe(int id) {
       }
     }
   }
+  */
  
 }
 //=================================================================================================//
 
 void setup() {
-  size(600, 400);  
+  size(600, 400);//
   st[0] = new Stage1();
   st[1] = new Stage2();
   st[2] = new Stage3();
@@ -161,6 +159,7 @@ void draw() {
     st[gf.Stage_id].display();
     ch.draw_chara();                       //Chara:draw_character
     st[gf.Stage_id].drawBrokenChara();     //Stage:draw_broken_character
+    println(st[gf.Stage_id].o.rect_num);
     if(ch.is_dead()) {                  //(hp < 0)
       gameFailed();                       //print_message_"you lose" and ask_continue
     } else {

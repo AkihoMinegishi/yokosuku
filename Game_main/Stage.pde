@@ -1,14 +1,13 @@
-/*****************************************************************
-methods:::
- relate_child_class::
-   [abstract_method]showBg:  show_background
-   [abstract_method]set_obj: set_object's_status
+/*
+methods::
+ relate_child_class:
+   [abstract_method]showBg:show_background
 
- un-relate_child_class::
-   drawBrokenChara:          draw_broken_characters
-   inputBrokenCharaStatus:   memorize_character's_broken_point_as_matrix
-   callBrokenCharaStatus:    return BrokenCharaStatus as matrix(1D)
-*****************************************************************/
+ un-relate_child_class:
+   drawBrokenChara:draw_broken_characters
+   inputBrokenCharaStatus:memorize_character's_broken_point_as_matrix
+   callBrokenCharaStatus:return BrokenCharaStatus as matrix(1D)
+*/
 
 abstract class Stage {
   Object o = new Object();
@@ -51,8 +50,6 @@ abstract class Stage {
   abstract void showBg();       //show_background
   
   abstract void set_obj();      //set_objects
-
-
 
 //=================================================================================================//
 //"broken"_processing//

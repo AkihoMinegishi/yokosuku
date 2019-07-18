@@ -8,7 +8,7 @@ class Stage1 extends Stage{
     for(int i = 0; i < 10; i++) {
       o.set_elps(random(width) * 2.0,random(height),30,30);
       o.set_rect(random(width) * 2.0,random(height),30,30);
+
     }
   }
-
 }

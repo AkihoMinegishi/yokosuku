@@ -1,18 +1,3 @@
-/****************************************************************
-methods::
- init_chara:         initialize_chara
- draw_chara:
- 
- chara_is_in_window: collision_detection_WALLs
- ifsafe_elps:        collision_detection_ELLIPSEs
- ifsafe_rect:        collision_detection_RECTANGLEs
- 
- damage:             decrease_life
- is_dead:            is_chara_dead?
- 
- move_chara:
- warp_chara:
-*****************************************************************/
 class Chara {
   float cx, cy, cd = 30.0, cr = cd / 2.0;
   int lifemax = 3, life = 3, dam = 3;
