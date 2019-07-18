@@ -193,7 +193,34 @@ void jud_safe(int id) {
   }
  
 }
-//=================================================================================================//
+
+//whethere reach the goal or not
+boolean ifGoal(int id) {
+  if(ch.ifsafe_rect(st[id].o.call_goal_status()) == false) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+//====================================================================
+//  stage3  //
+//==========//
+////////////////////stage3///////////////////////////
+float deg,deg2 = 0;
+PImage img,img2;
+Enemy e;
+PrePlayer p;
+Stage3_draw s3;
+Title t;
+
+float xP,yP;
+float time= 0;
+float mx = 0;
+float my = 0;
+//////////////////////////////////////////////////////
+//====================================================================
+
 
 void setup() {
   size(600, 400);//
@@ -206,8 +233,23 @@ void setup() {
     st[i].init_stage();
     st[i].set_obj();           //Stage:set_objects
   }
+  
+  ///////////////////stage3////////////////////////////
+  xP = 10;
+  yP = 600;
+  time = 0;
+  p = new PrePlayer();
+  e = new Enemy();
+  s3 = new Stage3_draw();
+  e.setE(100);
+  //img = loadImage("2970.png");
+  //img2 = loadImage("2970.png");
+  //img.resize(img.width/5,img.height/5);
+  //img2.resize(img2.width/3,img2.height/3);
+  frameRate(60);
+  ///////////////////////////////////////////////////////
 }
-int num = 0;
+
 void draw() {
   if(gf.Title) {                       //state:title
     ti.display_title();                //Title:display_title
@@ -215,22 +257,68 @@ void draw() {
       ti.display_how_to_play();        //Title:display_how_to_play
     }
   } else if(gf.Game) {                     //state:game
-    st[gf.Stage_id].showBg();              //Stage:draw_stage_background
-    st[gf.Stage_id].display();
-    control_character();
-    ch.draw_chara();                       //Chara:draw_character
-    st[gf.Stage_id].drawBrokenChara();     //Stage:draw_broken_character
-    //println(st[gf.Stage_id].o.rect_num);
-    if(ch.is_dead()) {                     //(hp < 0)
-      white_out();                         //white out
-      gameFailed();                        //print_message_"you lose" and ask_continue
-    } else {
-      jud_safe(gf.Stage_id);               //collision_detection
+  
+    /////////////////////////////////////////////////////////////////////////////////////////////////
+    if(gf.Stage_id == 2) {
+      //title画面から3を選ぶと////
+      changeWindowSize(600, 700);
+      println(time);
+      time++;
+      if(time%4000 > 100 && time%2000 < 450){
+        mx-=0.5;my+=1.0;
+      }else if(time%2200 > 600 && time%2200 < 1000){
+        mx+=1;
+      }else if(time%2200 > 1100 && time%2200 < 1500){
+        mx+=0.5;my-=0.5;
+      }else if(time%2000 > 1550 && time%2200 < 1950){
+        mx-=1;my-=0.5;
+      }else if(time%2200 > 2000 && time%2200 < 2199){
+      }
+      translate(mx,my);
+      fill(200);
+      s3.drawStage(mx,my);
+      p.drawMe();
+      p.move();
+      p.preMe();
+      e.drawE(100);
+      hit(e.enemyHit(xP,yP));
+      hit(stageHit(xP,yP));
+      e.preEHit();
+      hit(p.preMHit(xP,yP));
+      println(preN);
+      pushMatrix();
+      fill(0,0,255);
+      textSize(100);
+      text(time,-100,0);
+      if(time > 2300){
+        textSize(100);
+        text("Clear!",500,0);
+        text("RETRY:",500,100);
+        text(preN,500,200);
+        noLoop();
+      }
+      popMatrix();
+    } else {///////////////////////////////////////////////////////////////////////////////////////     
+      
+      st[gf.Stage_id].showBg();              //Stage:draw_stage_background
+      st[gf.Stage_id].display();
+      control_character();
+      ch.draw_chara();                       //Chara:draw_character
+      st[gf.Stage_id].drawBrokenChara();     //Stage:draw_broken_character
+      //println(st[gf.Stage_id].o.rect_num);
+      if(ch.is_dead()) {                     //(hp < 0)
+        white_out();                         //white out
+        gameFailed();                        //print_message_"you lose" and ask_continue
+      } else {
+        jud_safe(gf.Stage_id);               //collision_detection
+      }
+      if(ifGoal(gf.Stage_id)) {       //Stage:when reach the goal
+        gf.stageClear();
+      }
     }
-    if(st[gf.Stage_id].ifClear()) {       //Stage:when reach the goal
-      gf.stageClear();
-    }
+    
   } else if(gf.Clear) { 
     gameCleared();                         //print_message_"game cleared" and ask_continue
   }
+  
 }

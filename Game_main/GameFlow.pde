@@ -1,5 +1,4 @@
 /*
-boolean pressedEnter:???
 methods::
  init:set_flags
  move_to_stage_i:move_to_stage_i          * i_is_stage_number
