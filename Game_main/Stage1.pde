@@ -5,7 +5,7 @@ class Stage1 extends Stage{
   }
   
   void set_obj() {
-    for(int i = 0; i < 20; i++) {
+    for(int i = 0; i < 22; i++) {
       o.set_elps(width + random(width) * 1.5, random(height), 20, 20);
       o.set_rect(width + random(width) * 1.5, random(height), 20, 20);
 

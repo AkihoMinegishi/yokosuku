@@ -87,9 +87,12 @@ void showMessage(String mes, int strsize, int strX, int strY) {
 //Game_clear_and_fail_processing//
 //====================//
 void askRetry() {
-  if(ask_retry) {                                                         //retry when 'r' or 'R' is pressed  
-    gf.increase_deadCnt();                                                //GameFlow:deadCnt++
-    st[gf.Stage_id].inputBrokenCharaStatus(ch.cx, ch.cy, ch.cd);          //Stage:memorize_chara's_broken_point
+  if(ask_retry) {                                                                  //retry when 'r' or 'R' is pressed
+    float[] around_first_pos = {width / 8, height / 2, ch.cd * 2.5, ch.cd * 2.5};  //avoid respawn-kill
+    if(ch.ifsafe_elps(around_first_pos)) {                                        
+      gf.increase_deadCnt();                                                       //GameFlow:deadCnt++
+      st[gf.Stage_id].inputBrokenCharaStatus(ch.cx, ch.cy, ch.cd);                 //Stage:memorize_chara's_broken_point
+    }
     st[gf.Stage_id].init_stage();                                         //Stage:init_stage
     ch.init_chara();                                                      //Chara:init_character
     ask_retry = false;
