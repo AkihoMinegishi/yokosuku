@@ -35,8 +35,7 @@ abstract class Stage {
     dy = 0;
     x_direction = -1;
     y_direction = 0;
-    object_col = color(0, 100, 130);
-    broken_col = color(128, 0, 0);
+    object_get_color();
     goal_col = color(255, 255, 128);
     
     ms = 0;
@@ -48,7 +47,7 @@ abstract class Stage {
   
   //自動スクロールの方向と速度変更
   void change_scroll_direction_and_speed(float x_pt, float y_pt, float new_dx, float new_dy, int x_dir, int y_dir) {
-    if(x_pos == -x_pt && y_pos == -y_pt) {
+    if(-x_pos == x_pt && -y_pos == y_pt) {
       dx = new_dx;
       dy = new_dy;
       x_direction = x_dir;
@@ -76,9 +75,9 @@ abstract class Stage {
   }
   
   // only for stage4
-  void white_out_trap(boolean bo) {
+  /*void white_out_trap(boolean bo) {
     chara_white = bo;
-  }
+  }*/
   void chara_stop_trap(boolean bo) {
     chara_stop = bo;
   }

@@ -128,7 +128,7 @@ void gameCleared() {
 }
 
 void white_out() {
-  if(gf.Stage_id >= 0) {
+  if(gf.Stage_id > 0) {
     st[gf.Stage_id].object_white_out(0);
     ch.chara_white_out(0);
   }
@@ -145,7 +145,7 @@ void control_character() {
 }
 
 //stage4's trap
-void make_exception() {
+void make_exception_event() {
   if(st[3].chara_white || (ch.is_dead() && 6000 <= st[3].ms && st[3].ms <= 9000)) {
     ch.chara_white_out(1);
   } else {
@@ -324,7 +324,7 @@ void draw() {
       st[gf.Stage_id].showBg();              //Stage:draw_stage_background
       st[gf.Stage_id].events();              //Stage:changing_scroll etc...
       if(gf.Stage_id == 3) {
-        make_exception();
+        make_exception_event();
       }
       st[gf.Stage_id].display();             //Stage:show_objects
       control_character();

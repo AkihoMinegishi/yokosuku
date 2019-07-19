@@ -1,4 +1,5 @@
 class Stage4 extends Stage {
+  boolean chara_white = false;
   color nor = color(240, 240, 255);
   
   void showBg() {
@@ -11,8 +12,9 @@ class Stage4 extends Stage {
   }
   
   void sayo_nara_event() {
-    change_scroll_direction_and_speed(width / 3.0,  0.0,  2.0,    0.0,    0,    0);
-    white_out_trap(true);
+    change_scroll_direction_and_speed(200, 0.0, 2.0, 0.0, 0, 0);
+    //white_out_trap(true);
+    chara_white = true;
     chara_stop_trap(true);
     object_white_out(1);
     background(255);
@@ -26,23 +28,26 @@ class Stage4 extends Stage {
     text("File\"Game_main/Stage4\", line 21", 20, 70+fall_y);
     text("See traceback.txt for details.", 20, 100+fall_y);
     noFill();
-    if(ms >= 6000 && chara_is_alive) {
-      chara_stop_trap(false);
-    }
-    if(ms >= 8000 && chara_is_alive) {
-      fall_y += 20;
-    }
-    if(ms >= 9000 && chara_is_alive) {
-      white_out_trap(false);
-      object_get_color();
-      x_pos = -(width / 3 + 2.0);
+    if(chara_is_alive) {
+      if(ms >= 6000) {
+        chara_stop_trap(false);
+      }
+      if(ms >= 8000) {
+        fall_y += 20;
+      }
+      if(ms >= 9000) {
+        //white_out_trap(false);
+        chara_white = true;
+        object_get_color();
+        x_pos = -(200 + 2.0);
+      }
     }
   }
   
   void events() {
   //change_scroll_direction_and_speed(x_pt, y_pt, new_dx, new_dy, x_dir, y_dir);
     change_scroll_direction_and_speed(0.0,  0.0,  2.0,    0.0,    -1,    0);
-    if(-x_pos == 200) {
+    if(200.0 <= -x_pos && -x_pos < 202.0) {
       ms = millis();
       sayo_nara_event();
     }
