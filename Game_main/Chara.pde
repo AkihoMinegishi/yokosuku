@@ -1,6 +1,6 @@
 class Chara {
   float cx, cy, cd = 30.0, cr = cd / 2.0;
-  int lifemax = 3, life = 3, dam = 0;
+  int lifemax = 3, life = 3, dam = 3;
   color chcol;
   boolean playing = true;
 
