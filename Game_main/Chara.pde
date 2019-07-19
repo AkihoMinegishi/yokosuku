@@ -1,6 +1,6 @@
 class Chara {
   float cx, cy, cd = 30.0, cr = cd / 2.0;
-  int lifemax = 3, life = 3, dam = 3;
+  int lifemax = 3, life = 3, dam = 0;
   color chcol;
   boolean playing = true;
 
@@ -11,8 +11,15 @@ class Chara {
     playing = true;
   }
   
-  void chara_white_out() {
-    chcol = color(240, 240, 240);
+  void chara_white_out(int cmd) {
+    if(cmd == 0) {
+      chcol = color(240, 240, 240);
+    } else if(cmd == 1) {
+      chcol = color(255, 255, 255);
+    }
+  }
+  void chara_get_color() {
+    chcol = color(128, 255, 0);
   }
   
   void draw_chara() {

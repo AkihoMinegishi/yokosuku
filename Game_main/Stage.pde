@@ -20,38 +20,71 @@ abstract class Stage {
     y_direction :y軸のスクロール方向
   ====================================*/
   float x_pos, y_pos;
-  int dx, dy;
+  float dx, dy;
   int x_direction, y_direction;
   color object_col, broken_col, goal_col;
+  //only for stage4
+  int ms;
+  float fall_y;
+  boolean chara_white = false, chara_stop = false, chara_is_alive;
   
   void init_stage() {
     x_pos  = 0;
     y_pos = 0;
     dx = 2;
-    dy = 1;
+    dy = 0;
     x_direction = -1;
     y_direction = 0;
     object_col = color(0, 100, 130);
     broken_col = color(128, 0, 0);
     goal_col = color(255, 255, 128);
+    
+    ms = 0;
+    fall_y = 0.0;
+    chara_white = false;
+    chara_stop = false;
+    chara_is_alive = true;
   }
   
-  //自動スクロールの方向変更
-  void change_scroll_direction(int id) {
-    int[] x_directions = { 1, 1, 0,-1,-1,-1, 0, 1};
-    int[] y_directions = { 0, 1, 1, 1, 0,-1,-1, 1};
-    x_direction = x_directions[id];
-    y_direction = y_directions[id];
+  //自動スクロールの方向と速度変更
+  void change_scroll_direction_and_speed(float x_pt, float y_pt, float new_dx, float new_dy, int x_dir, int y_dir) {
+    if(x_pos == -x_pt && y_pos == -y_pt) {
+      dx = new_dx;
+      dy = new_dy;
+      x_direction = x_dir;
+      y_direction = y_dir;
+    }
   }
   
   //stop all abjects
   void stop_stage() {
+    chara_is_alive = false;
     dx = 0;
     dy = 0;
   }
   
-  void object_white_out() {
-    object_col = broken_col = color(240, 240, 240);
+  void object_white_out(int cmd) {
+    if(cmd == 0) {
+      object_col = broken_col = color(240, 240, 240);
+    } else if(cmd == 1) {
+      object_col = broken_col = color(255, 255, 255);
+    }
+  }
+  void object_get_color() {
+    object_col = color(0, 100, 130);
+    broken_col = color(128, 0, 0);
+  }
+  
+  // only for stage4
+  void white_out_trap(boolean bo) {
+    chara_white = bo;
+  }
+  void chara_stop_trap(boolean bo) {
+    chara_stop = bo;
+  }
+  float[] txtrect_status() {
+    float[] rc = {0, 0, 0, 0};
+    return rc;
   }
 
   void display() {
@@ -72,9 +105,11 @@ abstract class Stage {
     y_pos += dy * y_direction;
   }
   
-  abstract void showBg();       //show_background
+  abstract void events();        //about_scroll_change_etc...
   
-  abstract void set_obj();      //set_objects
+  abstract void showBg();        //show_background
+  
+  abstract void set_obj();       //set_objects
 
 //=================================================================================================//
 //"broken"_processing//

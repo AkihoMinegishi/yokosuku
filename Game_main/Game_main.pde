@@ -128,22 +128,35 @@ void gameCleared() {
 }
 
 void white_out() {
-  if(gf.Stage_id > 0) {
-    st[gf.Stage_id].object_white_out();
-    ch.chara_white_out();
+  if(gf.Stage_id >= 0) {
+    st[gf.Stage_id].object_white_out(0);
+    ch.chara_white_out(0);
   }
 }
 //=================================================================================================//
 
 
-
+float step = 3.0;
 void control_character() {
-  float step = 3.0;
   if(right == true) ch.move_chara(step, 0);
   if(left == true) ch.move_chara(-step, 0);
   if(up == true) ch.move_chara(0, -step);
   if(down == true) ch.move_chara(0, step);
 }
+
+//stage4's trap
+void make_exception() {
+  if(st[3].chara_white || (ch.is_dead() && 6000 <= st[3].ms && st[3].ms <= 9000)) {
+    ch.chara_white_out(1);
+  } else {
+    ch.chara_get_color();
+  }
+  if(st[3].chara_stop) {
+    step = 0.0;
+  } else if(ch.is_dead() == false) {
+    step = 3.0;
+  }
+} 
 
 //=================================================================================================//
 //collision_detection//
@@ -182,6 +195,11 @@ void jud_safe(int id) {
       if(ch.is_dead()) {
         break;
       }
+    }
+  }
+  if(id == 3) {
+    if(ch.ifsafe_rect(st[id].txtrect_status()) == false) {
+      ch.damage();
     }
   }
 
@@ -304,7 +322,11 @@ void draw() {
     } else {///////////////////////////////////////////////////////////////////////////////////////     
       
       st[gf.Stage_id].showBg();              //Stage:draw_stage_background
-      st[gf.Stage_id].display();
+      st[gf.Stage_id].events();              //Stage:changing_scroll etc...
+      if(gf.Stage_id == 3) {
+        make_exception();
+      }
+      st[gf.Stage_id].display();             //Stage:show_objects
       control_character();
       ch.draw_chara();                       //Chara:draw_character
       st[gf.Stage_id].drawBrokenChara();     //Stage:draw_broken_character
