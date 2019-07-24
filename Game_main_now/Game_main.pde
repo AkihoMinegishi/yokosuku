@@ -233,10 +233,10 @@ void jud_safe(int id) {
 }
 
 //whethere reach the goal or not
-boolean ifGoal(int id) {
-  for(int i = 0; i < st[id].o.goal_num; i++) {
-    if(st[id].o.obgoal[i][4] == 1) {
-      if(ch.ifsafe_rect(st[id].o.call_goal_status(i)) == false) {
+boolean ifGoal(int stid) {
+  for(int i = 0; i < st[stid].o.goal_num; i++) {
+    if(st[stid].o.obgoal[i][4] == 1) {
+      if(ch.ifsafe_rect(st[stid].o.call_goal_status(i)) == false) {
         return true;
       }
     }
