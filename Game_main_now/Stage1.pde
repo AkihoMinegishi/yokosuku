@@ -51,14 +51,14 @@ class Stage1 extends Stage{
     for(int i = 0; i < 10; i++) {
        for(int j = 0; j < 5; j++) {
          if((i + j) % 2 == 0) {
-           o.set_elps(1600+(100*i) + 10, 40+(70*j) + 10, 40, 40, 1);
+           o.set_elps(1600+(90*i) + 20, 40+(70*j) + 20, 40, 40, 1);
          } else {
-           o.set_rect(1600+(100*i),      40+(70*j),      40, 40, 1);
+           o.set_rect(1600+(90*i),      40+(70*j),      40, 40, 1);
          }
        }
     }
     
-    for(int i = 0; i < 10; i++) {
+    for(int i = 0; i < 9; i++) {
       if(i < 8) {
         o.set_rect(width + 200*i, 0,                 200, 5*(i+1),     1); //seil
         o.set_rect(width + 200*i, height - 5*(i+1),  200, 5*(i+1)+100, 1); //floor

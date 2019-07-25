@@ -18,7 +18,7 @@ void keyPressed() {
         }
       }
       //show how to play
-      if(key == 'h' || key == 'H') {
+      if(keyCode == ENTER) {
         show_htp = true;
       }
     } else {
@@ -47,7 +47,6 @@ void keyPressed() {
       if(key == 's')  down = true;   //move to down
     }
     //about_control_character===end===
-    
     if(ch.is_dead() && (key == 'r' || key == 'R')) {
       ask_retry = true;
     }

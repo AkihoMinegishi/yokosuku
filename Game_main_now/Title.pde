@@ -11,7 +11,7 @@ class Title {
     textSize(24);
     text("How to play / change key style", 100, 170);
     int pressKey_x = 375;
-    text("-press [H]", pressKey_x, 205);
+    text("-press [ENTER]", pressKey_x, 205);
     
     text("Game start", 100, 250);
     int stageN_x = 140;

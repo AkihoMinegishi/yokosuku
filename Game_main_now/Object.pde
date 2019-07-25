@@ -17,7 +17,7 @@ class Object {
     obelps[elps_num][1] = y;
     obelps[elps_num][2] = w;
     obelps[elps_num][3] = h;
-    obrect[elps_num][4] = exist;
+    obelps[elps_num][4] = exist;
     elps_num++;
   }
   void set_goal(float x, float y, float w, float h, float exist) {
