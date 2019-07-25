@@ -80,7 +80,7 @@ class Stage4 extends Stage {
     textSize(22);
     text("An exception has occured.", 20, 42+fall_y);
     textSize(15);
-    text("File\"Game_main/Stage4.pde\", line 54", 20, 75+fall_y);
+    text("File\"Game_main/Stage4.pde\", line 83", 20, 75+fall_y);
     text("See traceback.txt for details.", 20, 100+fall_y);
     noFill();
     if(chara_is_alive) {
