@@ -1,38 +1,68 @@
+import java.io.File;
+import java.io.PrintWriter;
+
 class Stage4 extends Stage {
   float fall_y;
   boolean chara_white, chara_stop;
   color nor = color(240, 240, 255);
   boolean create_file;
-  PrintWriter file;
+  File fl;
+  PrintWriter pw;
   
   void init_stage_for_each() {    
     fall_y = 0.0;
     chara_white = false;
     chara_stop = false;    
     create_file = true;
+    //fl = new File("traceback.txt"); //I couldn't make this process :-( 
+    //fl.delete();
   }
   
   void showBg() {
     background(nor);
   }
   
-  void white_out_trap(boolean bo) {
-    chara_white = bo;
-  }
-  void chara_stop_trap(boolean bo) {
-    chara_stop = bo;
-  }
-  
   float[] txtrect_status() {
     float[] rc = {20, 25+fall_y, 285, 75};
     return rc;
   }
+  void print_traceback() {
+    String mes1 = "Oh jeez...There isn't anything wrong, is there? Wait a minute...Hej, you can probably fix this.";
+    String mes2 = "Push key 'Z' to make the whole thing right. Why don't you do it right now before when EVERYTHING IS TOO LATE?";
+    
+    pw.println("I'm sorry, but an uncaught exception occurred.");
+    pw.println("");
+    pw.println("While running game code:");
+    pw.println("File \"Game_main/Chara.pde\", line 31, in draw_chara");
+    pw.println("File \"Game_main/Game_main.pde\", line 303, in main");
+    pw.println("File \"Game_main/Stage4.pde\", line 78, in events");
+    pw.println("processing.draw(\"Game_main\")");
+    pw.println("");
+    pw.print("JumpException: ");
+    pw.println(mes1);
+    pw.println(mes2);
+    pw.println("");
+    pw.println("-- Full Traceback ------------------------------------------------------------");
+    pw.println("");
+    pw.println("Full traceback:");
+    pw.println("File \"Game_main/Chara.pde\", line 31, in draw_chara");
+    pw.println("File \"Game_main/Game_main.pde\", line 303, in main");
+    pw.println("File \"C:\\Program Files (x86)\\processing\\codes\\Game_main\\Game_main.pde\", line 303, in main");
+    pw.println("processing.java.bin(\"java.dll\")");
+    pw.println("File \"C:\\Program Files (x86)\\processing\\codes\\Game_main\\Chara.pde\", line 98, in move_chara");
+    pw.println("exec bytecode in globals, locals");
+    pw.println("File \"Game_main/Stage4.pde\", line 78, in events");
+    pw.println("processing.draw(\"Game_main\")");
+    pw.println("File \"C:\\Program Files (x86)\\processing\\codes\\Game_main\\Game_main.pde\", line 300, in sayo_nara_event");
+    pw.println("raise processing.java.JumpException(ch.args[0])");
+    pw.println("");
+    pw.print("JumpException: ");
+    pw.println(mes1);
+    pw.println(mes2);
+  } //these message are nonsense lol (this gimmick is inspired by DDLC)
   
   void sayo_nara_event() {
     change_scroll_direction_and_speed(200, 0.0, 2.0, 0.0, 0, 0);
-    //white_out_trap(true);
-    chara_white = true;
-    chara_stop_trap(true);
     object_white_out(1);
     background(255);
     noFill();
@@ -41,10 +71,10 @@ class Stage4 extends Stage {
     stroke(0);
     fill(0);
     if(create_file) {
-      file = createWriter("traceback.txt");
-      file.print("lol");
-      file.flush();
-      file.close();
+      pw = createWriter("traceback.txt");
+      print_traceback();
+      pw.flush();
+      pw.close();
       create_file = false;
     }
     textSize(22);
@@ -54,15 +84,10 @@ class Stage4 extends Stage {
     text("See traceback.txt for details.", 20, 100+fall_y);
     noFill();
     if(chara_is_alive) {
-      if(passed_time >= 6000) {
-        chara_stop_trap(false);
+      if(8000 <= passed_time && passed_time <= 15000) {
+        fall_y += 10;
       }
-      if(passed_time >= 8000) {
-        fall_y += 20;
-      }
-      if(passed_time >= 9000) {
-        //white_out_trap(false);
-        chara_white = true;
+      if(9000 <= passed_time) {
         object_get_color();
         x_pos = -(200 + 2.0);
       }
@@ -98,6 +123,7 @@ class Stage4 extends Stage {
     }
     
     o.set_rect(1900, 600, 1000, 600, 1); //id 5
+    o.set_rect(2195, 200, 5, 400, 1);
     //goal
     o.set_goal(2200, 0 + 100, width, height + 200, 1); //id 0
   }

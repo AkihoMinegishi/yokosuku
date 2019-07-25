@@ -3,6 +3,7 @@
 //==========//
 boolean up, down, left, right, change_style;
 boolean show_htp = false, ask_retry = false, ask_go_title = false;
+boolean ifstop_chara = true; //for stage4
 
 void keyPressed() {
   
@@ -50,6 +51,16 @@ void keyPressed() {
     if(ch.is_dead() && (key == 'r' || key == 'R')) {
       ask_retry = true;
     }
+    
+    //abouut stage4's trap
+    if(gf.Stage_id == 3) {
+      if(tm.jud_time_between(1, 9000)) {
+        if(key == 'Z') {
+          ifstop_chara = false;
+        }
+      }
+    }
+    
   }
   
   if((gf.Game && ch.is_dead()) || gf.Clear) {

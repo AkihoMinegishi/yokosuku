@@ -41,6 +41,7 @@ void askRetry() {
     st[gf.Stage_id].init_stage();                                         //Stage:init_stage
     st[gf.Stage_id].init_stage_for_each();
     ch.init_chara();                                                      //Chara:init_character
+    tm.init_time();                                                       //Time:init_time
     ask_retry = false;
   }
 }
@@ -51,6 +52,7 @@ void askGoTitle() {
     st[gf.Stage_id].init_stage();           //Stage:init_stage
     st[gf.Stage_id].init_stage_for_each();
     ch.init_chara();                        //Chara:init_character
+    tm.init_time();                         //Time:init_time
     gf.back_title();
     ask_go_title = false;
   }
@@ -91,24 +93,31 @@ void white_out() {
 //====================//
 
 //Stage4
-/*
 void make_sayo_nara_event() {
+  if(ch.is_dead()) {
+    tm.stop_time();
+  }
+  
   st[3].get_time(tm.get_passed_time());
   if(-st[3].x_pos < 200.0) {
     ch.change_chara_steps(2.0);
     tm.measure_start();
+    ifstop_chara = true;
   }
-  if(st[3].chara_white || (ch.is_dead() && tm.jud_time_between(6000, 9000))) {
+  
+  if(tm.jud_time_between(1, 9000)) {
     ch.chara_white_out(1);
-  } else if(ch.is_dead() == false && tm.jud_time_between(9000, -1)){
+  } else if(ch.is_dead() == false) {
     ch.chara_get_color();
   }
-  if(st[3].chara_stop) {
+  
+  if(ifstop_chara && tm.jud_time_between(1, 9000)) {
     ch.change_chara_steps(0.0);
-  } else if(ch.is_dead() == false) {
+  }
+  if(ifstop_chara == false && tm.jud_time_between(1, 9000) && ch.is_dead() == false) {
     ch.change_chara_steps(3.0);
   }
-}*/
+}
 
 //=================================================================================================//
 //collision_detection//
@@ -154,12 +163,11 @@ void jud_safe(int id) {
     }
   }
   //collision_detection_RECTANGLE_on_Stage4
-  /*
   if(id == 3) {
     if(ch.ifsafe_rect(st[id].txtrect_status()) == false) {
       ch.damage();
     }
-  }*/
+  }
 
   //collision_detection_BROKEN_CHARAs
   for(i = 0; i < gf.getDeadCount(); i++) {
@@ -211,6 +219,7 @@ void setup() {
   st[2] = new Stage3();
   st[3] = new Stage4();
   ch.init_chara();
+  tm.init_time();
   for(int i = 0; i < 4; i++) {
     st[i].init_stage();
     st[i].init_stage_for_each();
@@ -288,7 +297,7 @@ void draw() {
       st[gf.Stage_id].showBg();              //Stage:draw_stage_background
       st[gf.Stage_id].events();              //Stage:changing_scroll etc...
       if(gf.Stage_id == 3) {
-        //make_sayo_nara_event();
+        make_sayo_nara_event();
       }
       st[gf.Stage_id].display();             //Stage:show_objects
       control_character();

@@ -14,15 +14,16 @@ int preN = 0;
 
 
 class Stage3 extends Stage{
-
-  void init_stage_for_each() {}
-  void events() {}
-  void set_obj() {}
-  
+  void events(){}        //about_scroll_change_etc...
+   void init_stage_for_each() {}
+ 
   void showBg() {
     background(224, 255, 224);
+
   }
   
+  void set_obj(){
+  }
   void display() {
     changeWindowSize(600, 700);
     fill(119,188,240);
@@ -31,10 +32,7 @@ class Stage3 extends Stage{
     ellipse(0,-0,1000,1000);
    //drawGear(); 
   }
-  
 }
-
-
 class PrePlayer{
   float degP = 0;
   void drawMe(){
@@ -59,7 +57,8 @@ class PrePlayer{
     }
   }
   
-  boolean preMHit(float x,float y){
+  
+   boolean preMHit(float x,float y){
     int flag = 0;
     for(int j = 0;j <100;j++){
       if(dist(x,y,preX[j],preY[j]) <= 10){
@@ -77,8 +76,6 @@ class PrePlayer{
     return true;
   } 
 }
-
-
 class Enemy{
   float [][] enemys = new float[100][2];
   float [] sizeE = new float[100];
@@ -159,8 +156,6 @@ void hit(boolean x){
   }
   if(key == 'r')reset();loop();
 }
-
-
 class Stage3_draw{
   void drawStage(float mx,float my){
     translate(mx,my);
@@ -176,8 +171,9 @@ class Stage3_draw{
 void changeWindowSize(int w, int h) {
   frame.setSize( w + frame.getInsets().left + frame.getInsets().right, h + frame.getInsets().top + frame.getInsets().bottom );
   size(w, h);
-  }
-  boolean stageHit(float x,float y){
+}
+
+boolean stageHit(float x,float y){
   if(dist(x,y,0,0) > 500 && dist(x,y,0,0) < 800 && xP+mx < width && xP+mx > 0 && yP+my < height && yP+my > 0){
     return true;
   }
