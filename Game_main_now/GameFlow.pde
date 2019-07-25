@@ -44,7 +44,7 @@ class GameFlow {
   
   //back to the title
   void back_title() {
-    Stage_id = -1;
+    Stage_id = 0;
     Title = true;
     Game = Clear = false;
   }

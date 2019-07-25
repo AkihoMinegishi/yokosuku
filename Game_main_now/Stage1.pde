@@ -58,7 +58,7 @@ class Stage1 extends Stage{
        }
     }
     
-    for(int i = 0; i < 9; i++) {
+    for(int i = 0; i < 10; i++) {
       if(i < 8) {
         o.set_rect(width + 200*i, 0,                 200, 5*(i+1),     1); //seil
         o.set_rect(width + 200*i, height - 5*(i+1),  200, 5*(i+1)+100, 1); //floor

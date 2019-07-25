@@ -45,7 +45,7 @@ void askRetry() {
 }
 
 void askGoTitle() {
-  if(ask_go_title) {                  //go title when 't' or 'T' is pressed
+  if(ask_go_title) {                  //go to the title when 't' or 'T' is pressed
     st[gf.Stage_id].reset_broken();       //reset broken characters
     st[gf.Stage_id].init_stage();         //Stage:init_stage
     ch.init_chara();                      //Chara:init_character
@@ -56,7 +56,7 @@ void askGoTitle() {
 
 void gameFailed() {
   showMessage("PRESS 'R' TO PLAY AGAIN", 16, width / 2 - 100, height / 2 + 34);
-  showMessage("PRESS 'T' TO BACK TO TITLE", 16, width / 2 - 100, height / 2 + 58);
+  showMessage("PRESS 'T' TO BACK TO THE TITLE", 16, width / 2 - 125, height / 2 + 58);
   st[gf.Stage_id].stop_stage();
   ch.playing = false;
   showMessage("You Lose :(", 28, width / 2 - 70, height / 2 - 34);
@@ -66,7 +66,7 @@ void gameFailed() {
 
 void gameCleared() {
   background(255, 255, 128);
-  showMessage("PRESS 'T' TO BACK TO TITLE", 16, width / 2 - 107, height / 2 + 50);
+  showMessage("PRESS 'T' TO BACK TO THE TITLE", 16, width / 2 - 132, height / 2 + 50);
   ch.playing = false;
   showMessage("Stage Cleared!!!", 28, width / 2 - 105, height / 2 - 50);
   if(gf.deadCnt == 0) {
