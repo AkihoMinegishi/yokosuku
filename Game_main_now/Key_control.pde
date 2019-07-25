@@ -12,6 +12,7 @@ void keyPressed() {
       //move to the N stage
       for(int i = 0; i < 4; i++) {
         if(key == st[i]) {
+          up = down = left = right = false;
           gf.move_to_stage_i(i);            //GameFlow:move_to_stage_i      * i_is_stage_number
           ch.init_chara();                  //Chara:init_character
         }

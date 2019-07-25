@@ -24,6 +24,8 @@ class Stage1 extends Stage{
   }
   
   void set_obj() {
+    o.rect_num = o.elps_num = o.goal_num = 0;
+    
     for(int i = 0; i < 11; i++) {
       o.set_elps(width + random(width) * 0.75, random(height), 20, 20, 1); //id 0~10
       o.set_rect(width + random(width) * 0.75, random(height), 20, 20, 1); //id 0~10

@@ -13,6 +13,8 @@ class Stage2 extends Stage{
 
 
   void set_obj() {
+    o.rect_num = o.elps_num = o.goal_num = 0;
+    
     //            x     y width height
     //floor
     o.set_rect(   0,  220, 1700,  200, 1); 

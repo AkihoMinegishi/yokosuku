@@ -1,7 +1,7 @@
 class Title {
   int key_config = 0;
   String[][] dir = {{"[UP]", "[LEFT]", "[DOWN]", "[RIGHT]"}, {"[W]", "[A]", "[S]", "[D]"}};
-  String[] mes = {"WASD", "arrow key"};
+  String[] mes = {"<WASD>", "<arrow key>"};
   
   void display_title() {
     background(0, 0, 0);
@@ -9,7 +9,7 @@ class Title {
     textSize(48);
     text("I WANNA (ry"             , 80, 100);
     textSize(24);
-    text("How to play and key config", 100, 170);
+    text("How to play / change key style", 100, 170);
     int pressKey_x = 375;
     text("-press [H]", pressKey_x, 205);
     
@@ -41,9 +41,9 @@ class Title {
     }
     
     textSize(22);
-    text("press [SHIFT]  ... change style to " + mes[key_config], width/6, height*7/10);
+    text("press [SHIFT]  ... change style to " + mes[key_config], width/10, height*14/20);
     
-    text("press [ENTER] ... back to the title" ,width/6, height*8/10);
+    text("press [ENTER] ... back to the title" ,width/10, height*17/20);
   }
 
 }

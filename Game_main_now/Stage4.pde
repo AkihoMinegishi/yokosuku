@@ -81,6 +81,8 @@ class Stage4 extends Stage {
   }
   
   void set_obj() {
+    o.rect_num = o.elps_num = o.goal_num = 0;
+    
     o.set_rect(520, 0, 400, height / 5 * 2, 1); //id 0
     o.set_rect(520, height - height / 5 * 2, 400, height / 5 * 2, 1); //id 1
     

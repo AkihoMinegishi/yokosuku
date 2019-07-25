@@ -45,10 +45,11 @@ void askRetry() {
 }
 
 void askGoTitle() {
-  if(ask_go_title) {                                                      //go title when 't' or 'T' is pressed
-    st[gf.Stage_id].reset_broken();                                       //reset broken characters
-    st[gf.Stage_id].init_stage();                                         //Stage:init_stage
-    ch.init_chara();                                                      //Chara:init_character
+  if(ask_go_title) {                  //go title when 't' or 'T' is pressed
+    st[gf.Stage_id].reset_broken();       //reset broken characters
+    st[gf.Stage_id].init_stage();         //Stage:init_stage
+    st[gf.Stage_id].set_obj();            //Stage:set_objects again 
+    ch.init_chara();                      //Chara:init_character
     gf.back_title();
     ask_go_title = false;
   }
@@ -169,10 +170,10 @@ void jud_safe(int id) {
 }
 
 //whethere reach the goal or not
-boolean ifGoal(int stid) {
-  for(int i = 0; i < st[stid].o.goal_num; i++) {
-    if(st[stid].o.obgoal[i][4] == 1) {
-      if(ch.ifsafe_rect(st[stid].o.call_goal_status(i)) == false) {
+boolean ifGoal(int id) {
+  for(int i = 0; i < st[id].o.goal_num; i++) {
+    if(st[id].o.obgoal[i][4] == 1) {
+      if(ch.ifsafe_rect(st[id].o.call_goal_status(i)) == false) {
         return true;
       }
     }

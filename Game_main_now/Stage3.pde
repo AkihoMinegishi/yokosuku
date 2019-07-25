@@ -9,6 +9,8 @@ class Stage3 extends Stage{
   }
   
   void set_obj() {
+    o.rect_num = o.elps_num = o.goal_num = 0;
+    
     //goal
     o.set_goal(999999.0, 999999.0, width, height, 1);
   }
