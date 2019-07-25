@@ -4,6 +4,8 @@
     |-GameFlow
     |-Object
     |-Stage
+    |-Time
+    |-Title
   現在ステージ番号はゲームフローが記憶(gf.Stage_id)
   死亡数はゲームフローが記憶(gf.deadCnt)
 */
@@ -12,64 +14,6 @@ Title     ti = new Title();
 Stage[]   st = new Stage[4];
 Chara     ch = new Chara();
 Time      tm = new Time();
-
-//=================================================================================================//
-//key_cotrol//
-//==========//
-boolean up, down, left, right;
-boolean show_htp = false, ask_retry = false, ask_go_title = false;
-void keyPressed() {
-  char[] st = {'1', '2', '3', '4'};
-  if(gf.Title) {
-    if(show_htp == false) {
-      for(int i = 0; i < 4; i++) {
-        if(key == st[i]) {
-          gf.move_to_stage_i(i);            //GameFlow:move_to_stage_i      * i_is_stage_number
-          ch.init_chara();                  //Chara:init_character
-        }
-      }
-    }
-    
-    if(key == 'h' || key == 'H') {
-      show_htp = true;
-    }
-    if(show_htp && keyCode == ENTER) {
-      show_htp = false;
-    }
-  }
-  
-  if(gf.Game == true) {               
-    //about_control_character==begin==
-    if(keyCode == RIGHT) right = true;      //
-    if(keyCode == LEFT)  left = true;       //
-    if(keyCode == UP)    up = true;         //
-    if(keyCode == DOWN)  down = true;       //
-    //about_control_character===end===
-    
-    if(ch.is_dead() && (key == 'r' || key == 'R')) {
-      ask_retry = true;
-    }
-  }
-  
-  if((gf.Game == true && ch.is_dead()) || gf.Clear == true) {
-    if(key == 't' || key == 'T') {
-      ask_go_title = true;
-    }
-  }
-}
-
-
-void keyReleased() {
-  if(gf.Game == true) {               //about_control_character==begin==
-    if(keyCode == RIGHT) right = false;     //
-    if(keyCode == LEFT)  left = false;      //
-    if(keyCode == UP)    up = false;        //
-    if(keyCode == DOWN)  down = false;      //
-  }
-  //about_control_character===end===
-}
-//=================================================================================================//
-
 
 
 //=================================================================================================//
@@ -136,14 +80,6 @@ void white_out() {
 }
 //=================================================================================================//
 
-
-float step = 3.0;
-void control_character() {
-  if(right == true) ch.move_chara(step, 0);
-  if(left == true) ch.move_chara(-step, 0);
-  if(up == true) ch.move_chara(0, -step);
-  if(down == true) ch.move_chara(0, step);
-}
 
 //=================================================================================================//
 //Traps_on_stages//
