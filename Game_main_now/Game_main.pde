@@ -67,9 +67,12 @@ void gameFailed() {
 
 void gameCleared() {
   background(255, 255, 128);
-  showMessage("PRESS 'T' TO BACK TO TITLE", 16, width / 2 - 110, height / 2 + 34);
+  showMessage("PRESS 'T' TO BACK TO TITLE", 16, width / 2 - 107, height / 2 + 50);
   ch.playing = false;
-  showMessage("Stage Cleared!!!!!", 28, width / 2 - 110, height / 2 - 34);
+  showMessage("Stage Cleared!!!", 28, width / 2 - 105, height / 2 - 50);
+  if(gf.deadCnt == 0) {
+    showMessage("Marvelous!!!!!", 28, width / 2 - 87, height / 2 - 12);
+  }
   askGoTitle();
 }
 

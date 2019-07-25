@@ -33,7 +33,7 @@ void keyPressed() {
     } 
   }
   
-  if(gf.Game) {               
+  if(gf.Game) {           
     //about_control_character==begin==
     if(ti.key_config == 0) {
       if(keyCode == RIGHT) right = true;   //move to right
