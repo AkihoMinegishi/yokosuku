@@ -92,7 +92,7 @@ void white_out() {
 
 //Stage4
 /*
-void make_exception_event() {
+void make_sayo_nara_event() {
   st[3].get_time(tm.get_passed_time());
   if(-st[3].x_pos < 200.0) {
     ch.change_chara_steps(2.0);
@@ -287,7 +287,7 @@ void draw() {
       st[gf.Stage_id].showBg();              //Stage:draw_stage_background
       st[gf.Stage_id].events();              //Stage:changing_scroll etc...
       if(gf.Stage_id == 3) {
-        //make_exception_event();
+        //make_sayo_nara_event();
       }
       st[gf.Stage_id].display();             //Stage:show_objects
       control_character();
