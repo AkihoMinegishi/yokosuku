@@ -101,9 +101,21 @@ class Stage4 extends Stage {
       sayo_nara_event();
     }
     change_scroll_direction_and_speed(width / 3 + 2.0,  0.0,  2.0,    0.0,    -1,    0);
-    change_scroll_direction_and_speed(1450.0, 0.0, 2.5, 0.0, 1, 0);
-    change_scroll_direction_and_speed(1142.5, 0.0, 2.5, 1.0, 0, -1);
-    change_scroll_direction_and_speed(1142.5, 40.0, 3.0, 1.0, -1, -1);
+    change_scroll_direction_and_speed(1450.0, 0.0,   2.5, 0.0,   1,  0);
+    change_scroll_direction_and_speed(1142.5, 0.0,   2.5, 1.0,   0, -1);
+    change_scroll_direction_and_speed(1142.5, 40.0,  3.0, 1.0,  -1, -1);
+    change_scroll_direction_and_speed(1802.5, 260.0, 2.5, 0.0,   1,  0);
+    change_scroll_direction_and_speed(1400.0, 260.0, 0.0, 0.5,   0, -1);
+    change_scroll_direction_and_speed(1400.0, 320.0, 0.0, 20.0,  0, -1);
+    change_scroll_direction_and_speed(1400.0, 1600.0, 0.0, 0.5,   0, -1);
+    /*if(1450 <= -y_pos) {
+      int[] id_list = {};
+      for(int i = 0; i < ; i++) {
+        o.exist_elps(id_list[i], 0);
+      }
+    }*/
+    change_scroll_direction_and_speed(1800.0, 1600.0, 0.0, 10.0,   0, -1);
+    change_scroll_direction_and_speed(1800.0, 2100.0, 10.0, 0.0,  -1, 0);
   }
   
   void set_obj() {
@@ -123,9 +135,17 @@ class Stage4 extends Stage {
     }
     
     o.set_rect(1900, 600, 1000, 600, 1); //id 5
-    o.set_rect(2195, 200, 5, 400, 1);
+    o.set_rect(2195, 200, 5, 400, 1); //id 6
+    
+    for(int i = 0; i < 30; i++) {
+      for(int j = 0; j < 15; j++) {
+        o.set_elps(1405+(i*20)+5, 1905+(j*20)+5, 10, 10, 1); //id 17~466
+      }
+    }
+    
     //goal
     o.set_goal(2200, 0 + 100, width, height + 200, 1); //id 0
+    o.set_goal(2800, 2100, width, height + 200, 1);
   }
 
 }

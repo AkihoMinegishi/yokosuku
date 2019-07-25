@@ -1,8 +1,8 @@
 class Object {
   int rect_num = 0, elps_num = 0, goal_num = 0;        //*under construction*
-  float[][] obrect = new float[128][5];    //*under construction*
-  float[][] obelps = new float[128][5];    //*under construction*
-  float[][] obgoal = new float[128][5];
+  float[][] obrect = new float[512][5];    //*under construction*
+  float[][] obelps = new float[512][5];    //*under construction*
+  float[][] obgoal = new float[512][5];
   
   void set_rect(float x, float y, float w, float h, float exist) {
     obrect[rect_num][0] = x;
