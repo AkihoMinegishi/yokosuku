@@ -1,18 +1,28 @@
 class Chara {
-  float cx, cy, cd = 30.0, cr = cd / 2.0;
-  int lifemax = 3, life = 3, dam = 3;
+  float cx, cy;
+  float cd = 30.0, cr = cd / 2.0;
+  float steps;
+  int lifemax = 3, life = 3, dam = 0; //dam = 3; default
   color chcol;
   boolean playing = true;
 
   void init_chara() {
     warp_chara(width / 8, height / 2);
+    change_chara_steps(3.0);
     chcol = color(128, 255, 0);
     life = lifemax;
     playing = true;
   }
   
-  void chara_white_out() {
-    chcol = color(240, 240, 240);
+  void chara_white_out(int cmd) {
+    if(cmd == 0) {
+      chcol = color(240, 240, 240);
+    } else if(cmd == 1) {
+      chcol = color(255, 255, 255);
+    }
+  }
+  void chara_get_color() {
+    chcol = color(128, 255, 0);
   }
   
   void draw_chara() {
@@ -108,6 +118,10 @@ class Chara {
     cx = dx;
     cy = dy;
   }
+  
+  void change_chara_steps(float st) {
+    steps = st;
+  } 
   
 //=================================================================================================//  
 }

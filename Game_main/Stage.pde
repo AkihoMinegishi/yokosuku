@@ -19,56 +19,86 @@ abstract class Stage {
     x_direction :x軸のスクロール方向
     y_direction :y軸のスクロール方向
   ====================================*/
-  float x_pos, y_pos; 
-  int dx, dy;
+  float x_pos, y_pos;
+  float dx, dy;
   int x_direction, y_direction;
-  color object_col, broken_col;
+  int passed_time;
+  color object_col, broken_col, goal_col;
+  boolean chara_is_alive;
   
   void init_stage() {
-    x_pos = 0;
+    x_pos  = 0;
     y_pos = 0;
     dx = 2;
-    dy = 1;
+    dy = 0;
     x_direction = -1;
     y_direction = 0;
-    object_col = color(0, 100, 130);
-    broken_col = color(128, 0, 0);
+    object_get_color();
+    goal_col = color(255, 255, 128);
+    chara_is_alive = true;
+    set_obj();
+  }
+  abstract void init_stage_for_each();
+  
+  //ステージの方向と速度変更
+  void change_scroll_direction_and_speed(float x_pt, float y_pt, float new_dx, float new_dy, int x_dir, int y_dir) {
+    if(-x_pos == x_pt && -y_pos == y_pt) {
+      dx = new_dx;
+      dy = new_dy;
+      x_direction = x_dir;
+      y_direction = y_dir;
+    }
   }
   
-  //自動スクロールの方向変更
-  void change_scroll_direction(int id) {
-    int[] x_directions = { 1, 1, 0,-1,-1,-1, 0, 1};
-    int[] y_directions = { 0, 1, 1, 1, 0,-1,-1, 1};
-    x_direction = x_directions[id];
-    y_direction = y_directions[id];
+  //get_time_from_Title_class
+  void get_time(int tm) {
+    passed_time = tm;
   }
   
-  //stop all objects
+  //stop all abjects
   void stop_stage() {
+    chara_is_alive = false;
     dx = 0;
     dy = 0;
   }
   
-  void object_white_out() {
-    object_col = broken_col = color(240, 240, 240);
+  //white out all objects
+  void object_white_out(int cmd) {
+    if(cmd == 0) {
+      object_col = broken_col = color(240, 240, 240);
+    } else if(cmd == 1) {
+      object_col = broken_col = color(255, 255, 255);
+    }
   }
-  
+  //get back color all objects 
+  void object_get_color() {
+    object_col = color(0, 100, 130);
+    broken_col = color(128, 0, 0);
+  }
+
   void display() {
-    fill(object_col);
     pushMatrix();             //元描画座標軸の保管
     translate(x_pos, y_pos);  //描画座標軸の変換
+    
+    noStroke();
+    fill(goal_col);
+    o.draw_goal();
+    stroke(0);
+    
+    fill(object_col);
     o.draw_elps();
     o.draw_rect();
+    
     popMatrix();              //元描画座標軸の呼び出し
     x_pos += dx * x_direction;
     y_pos += dy * y_direction;
   }
   
-  abstract boolean ifClear();      //whether reached the goal or not
+  abstract void events();        //about_scroll_change_etc...
   
-  abstract void showBg();       //show_background
+  abstract void showBg();        //show_background
   
-  abstract void set_obj();      //set_objects
+  abstract void set_obj();       //set_objects
 
 //=================================================================================================//
 //"broken"_processing//

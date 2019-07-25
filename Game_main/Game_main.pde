@@ -4,6 +4,8 @@
     |-GameFlow
     |-Object
     |-Stage
+    |-Time
+    |-Title
   現在ステージ番号はゲームフローが記憶(gf.Stage_id)
   死亡数はゲームフローが記憶(gf.deadCnt)
 */
@@ -11,64 +13,7 @@ GameFlow  gf = new GameFlow();
 Title     ti = new Title();
 Stage[]   st = new Stage[4];
 Chara     ch = new Chara();
-
-//=================================================================================================//
-//key_cotrol//
-//==========//
-boolean up, down, left, right;
-boolean show_htp = false, ask_retry = false, ask_go_title = false;
-void keyPressed() {
-  char[] st = {'1', '2', '3', '4'};
-  if(gf.Title) {
-    if(show_htp == false) {
-      for(int i = 0; i < 4; i++) {
-        if(key == st[i]) {
-          gf.move_to_stage_i(i);            //GameFlow:move_to_stage_i      * i_is_stage_number
-          ch.init_chara();                  //Chara:init_character
-        }
-      }
-    }
-    
-    if(key == 'h' || key == 'H') {
-      show_htp = true;
-    }
-    if(show_htp && keyCode == ENTER) {
-      show_htp = false;
-    }
-  }
-  
-  if(gf.Game == true) {        
-    //about_control_character==begin==
-    if(keyCode == RIGHT) right = true;      //
-    if(keyCode == LEFT)  left = true;       //
-    if(keyCode == UP)    up = true;         //
-    if(keyCode == DOWN)  down = true;       //
-    //about_control_character===end===
-    
-    if(ch.is_dead() && (key == 'r' || key == 'R')) {
-      ask_retry = true;
-    }
-  }
-  
-  if((gf.Game == true && ch.is_dead()) || gf.Clear == true) {
-    if(key == 't' || key == 'T') {
-      ask_go_title = true;
-    }
-  }
-}
-
-
-void keyReleased() {
-  if(gf.Game == true) {               //about_control_character==begin==
-    if(keyCode == RIGHT) right = false;     //
-    if(keyCode == LEFT)  left = false;      //
-    if(keyCode == UP)    up = false;        //
-    if(keyCode == DOWN)  down = false;      //
-  }
-  //about_control_character===end===
-}
-//=================================================================================================//
-
+Time      tm = new Time();
 
 
 //=================================================================================================//
@@ -87,20 +32,25 @@ void showMessage(String mes, int strsize, int strX, int strY) {
 //Game_clear_and_fail_processing//
 //====================//
 void askRetry() {
-  if(ask_retry) {
-    gf.increase_deadCnt();                                                //GameFlow:deadCnt++
-    st[gf.Stage_id].inputBrokenCharaStatus(ch.cx, ch.cy, ch.cd);          //Stage:memorize_chara's_broken_point
-    st[gf.Stage_id].init_stage();
+  if(ask_retry) {                                                                  //retry when 'r' or 'R' is pressed
+    float[] around_first_pos = {width / 8, height / 2, ch.cd * 2.5, ch.cd * 2.5};  //avoid respawn-kill
+    if(ch.ifsafe_elps(around_first_pos)) {                                        
+      gf.increase_deadCnt();                                                       //GameFlow:deadCnt++
+      st[gf.Stage_id].inputBrokenCharaStatus(ch.cx, ch.cy, ch.cd);                 //Stage:memorize_chara's_broken_point
+    }
+    st[gf.Stage_id].init_stage();                                         //Stage:init_stage
+    st[gf.Stage_id].init_stage_for_each();
     ch.init_chara();                                                      //Chara:init_character
     ask_retry = false;
   }
 }
 
 void askGoTitle() {
-  if(ask_go_title) {
-    st[gf.Stage_id].reset_broken();
-    st[gf.Stage_id].init_stage();
-    ch.init_chara();
+  if(ask_go_title) {                  //go to the title when 't' or 'T' is pressed
+    st[gf.Stage_id].reset_broken();         //reset broken characters
+    st[gf.Stage_id].init_stage();           //Stage:init_stage
+    st[gf.Stage_id].init_stage_for_each();
+    ch.init_chara();                        //Chara:init_character
     gf.back_title();
     ask_go_title = false;
   }
@@ -108,7 +58,7 @@ void askGoTitle() {
 
 void gameFailed() {
   showMessage("PRESS 'R' TO PLAY AGAIN", 16, width / 2 - 100, height / 2 + 34);
-  showMessage("PRESS 'T' TO BACK TO TITLE", 16, width / 2 - 100, height / 2 + 58);
+  showMessage("PRESS 'T' TO BACK TO THE TITLE", 16, width / 2 - 125, height / 2 + 58);
   st[gf.Stage_id].stop_stage();
   ch.playing = false;
   showMessage("You Lose :(", 28, width / 2 - 70, height / 2 - 34);
@@ -116,31 +66,49 @@ void gameFailed() {
   askGoTitle();
 }
 
-void gameCleared() { 
+void gameCleared() {
   background(255, 255, 128);
-  showMessage("PRESS 'T' TO BACK TO TITLE", 16, width / 2 - 110, height / 2 + 34);
+  showMessage("PRESS 'T' TO BACK TO THE TITLE", 16, width / 2 - 132, height / 2 + 50);
   ch.playing = false;
-  showMessage("Stage Cleared!!!!!", 28, width / 2 - 110, height / 2 - 34);
+  showMessage("Stage Cleared!!!", 28, width / 2 - 105, height / 2 - 50);
+  if(gf.deadCnt == 0) {
+    showMessage("Marvelous!!!!!", 28, width / 2 - 87, height / 2 - 12);
+  }
   askGoTitle();
 }
 
 void white_out() {
   if(gf.Stage_id > 0) {
-    st[gf.Stage_id].object_white_out();
-    ch.chara_white_out();
+    st[gf.Stage_id].object_white_out(0);
+    ch.chara_white_out(0);
   }
 }
 //=================================================================================================//
 
 
+//=================================================================================================//
+//Traps_on_stages//
+//====================//
 
-void control_character() {
-  float step = 3.0;
-  if(right == true) ch.move_chara(step, 0);
-  if(left == true) ch.move_chara(-step, 0);
-  if(up == true) ch.move_chara(0, -step);
-  if(down == true) ch.move_chara(0, step);
-}
+//Stage4
+/*
+void make_sayo_nara_event() {
+  st[3].get_time(tm.get_passed_time());
+  if(-st[3].x_pos < 200.0) {
+    ch.change_chara_steps(2.0);
+    tm.measure_start();
+  }
+  if(st[3].chara_white || (ch.is_dead() && tm.jud_time_between(6000, 9000))) {
+    ch.chara_white_out(1);
+  } else if(ch.is_dead() == false && tm.jud_time_between(9000, -1)){
+    ch.chara_get_color();
+  }
+  if(st[3].chara_stop) {
+    ch.change_chara_steps(0.0);
+  } else if(ch.is_dead() == false) {
+    ch.change_chara_steps(3.0);
+  }
+}*/
 
 //=================================================================================================//
 //collision_detection//
@@ -164,24 +132,35 @@ void jud_safe(int id) {
 
   //collision_detection_ELLIPSEs
   for(i = 0; i < st[id].o.elps_num; i++) {
-    if(ch.ifsafe_elps(st[id].o.call_elps_status(i)) == false) {
-      ch.damage();
-      if(ch.is_dead()) {
-        break;
+    if(st[id].o.obelps[i][4] == 1) {
+      if(ch.ifsafe_elps(st[id].o.call_elps_status(i)) == false) {
+        ch.damage();
+        if(ch.is_dead()) {
+          break;
+        }
       }
     }
   }
  
   //collision_detection_RECTANGLEs
   for(i = 0; i < st[id].o.rect_num; i++) {
-    if(ch.ifsafe_rect(st[id].o.call_rect_status(i)) == false) {
-      ch.damage();
-      if(ch.is_dead()) {
-        break;
+    if(st[id].o.obrect[i][4] == 1) {
+      if(ch.ifsafe_rect(st[id].o.call_rect_status(i)) == false) {
+        ch.damage();
+        if(ch.is_dead()) {
+          break;
+        }
       }
     }
   }
-  
+  //collision_detection_RECTANGLE_on_Stage4
+  /*
+  if(id == 3) {
+    if(ch.ifsafe_rect(st[id].txtrect_status()) == false) {
+      ch.damage();
+    }
+  }*/
+
   //collision_detection_BROKEN_CHARAs
   for(i = 0; i < gf.getDeadCount(); i++) {
     if(ch.ifsafe_elps(st[id].callBrokenCharaStatus(i)) == false) {
@@ -193,13 +172,24 @@ void jud_safe(int id) {
   }
  
 }
-//=================================================================================================//
+
+//whethere reach the goal or not
+boolean ifGoal(int id) {
+  for(int i = 0; i < st[id].o.goal_num; i++) {
+    if(st[id].o.obgoal[i][4] == 1) {
+      if(ch.ifsafe_rect(st[id].o.call_goal_status(i)) == false) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
 
 //====================================================================
 //  stage3  //
 //==========//
 ////////////////////stage3///////////////////////////
-float deg,deg2 = 0;
+/*float deg,deg2 = 0;
 PImage img,img2;
 Enemy e;
 PrePlayer p;
@@ -209,10 +199,9 @@ Title t;
 float xP,yP;
 float time= 0;
 float mx = 0;
-float my = 0;
+float my = 0;*/
 //////////////////////////////////////////////////////
 //====================================================================
-
 
 
 void setup() {
@@ -224,9 +213,9 @@ void setup() {
   ch.init_chara();
   for(int i = 0; i < 4; i++) {
     st[i].init_stage();
+    st[i].init_stage_for_each();
     st[i].set_obj();           //Stage:set_objects
   }
-  
   
   ///////////////////stage3////////////////////////////
   xP = 10;
@@ -242,22 +231,20 @@ void setup() {
   //img2.resize(img2.width/3,img2.height/3);
   frameRate(60);
   ///////////////////////////////////////////////////////
-  
-  
 }
 
-int num = 0;
 void draw() {
+  tm.measure_whole_time();
   if(gf.Title) {                       //state:title
     ti.display_title();                //Title:display_title
     if(show_htp == true) {             
       ti.display_how_to_play();        //Title:display_how_to_play
     }
-  } else if(gf.Game) {                 //state:game
+  } else if(gf.Game) {                     //state:game
   
-  
-    //////////////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////////
     if(gf.Stage_id == 2) {
+      background(200);
       //title画面から3を選ぶと////
       changeWindowSize(600, 700);
       println(time);
@@ -296,32 +283,31 @@ void draw() {
         noLoop();
       }
       popMatrix();
-    } else  {//////////////////////////////////////////////////////////////////////////////////////////////  
-    
-  
-  
-  
-  
-  
-      st[gf.Stage_id].showBg();              //Stage:draw_stage_background  
-      st[gf.Stage_id].display();
+    } else {///////////////////////////////////////////////////////////////////////////////////////     
+      
+      st[gf.Stage_id].showBg();              //Stage:draw_stage_background
+      st[gf.Stage_id].events();              //Stage:changing_scroll etc...
+      if(gf.Stage_id == 3) {
+        //make_sayo_nara_event();
+      }
+      st[gf.Stage_id].display();             //Stage:show_objects
       control_character();
       ch.draw_chara();                       //Chara:draw_character
       st[gf.Stage_id].drawBrokenChara();     //Stage:draw_broken_character
-      if(ch.is_dead()) {                  //(hp < 0)
-        white_out();                        //white out
-        gameFailed();                       //print_message_"you lose" and ask_continue
+      //println(st[gf.Stage_id].o.rect_num);
+      if(ch.is_dead()) {                     //(hp < 0)
+        white_out();                         //white out
+        gameFailed();                        //print_message_"you lose" and ask_continue
       } else {
-        jud_safe(gf.Stage_id);              //collision_detection       
+        jud_safe(gf.Stage_id);               //collision_detection
       }
-      if(st[gf.Stage_id].ifClear()) {
+      if(ifGoal(gf.Stage_id)) {       //Stage:when reach the goal
         gf.stageClear();
       }
     }
     
-    
-
   } else if(gf.Clear) { 
-    gameCleared();                          //print_message_"game cleared" and ask_continue
+    gameCleared();                         //print_message_"game cleared" and ask_continue
   }
+  
 }
