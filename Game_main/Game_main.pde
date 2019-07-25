@@ -4,6 +4,8 @@
     |-GameFlow
     |-Object
     |-Stage
+    |-Time
+    |-Title
   現在ステージ番号はゲームフローが記憶(gf.Stage_id)
   死亡数はゲームフローが記憶(gf.deadCnt)
 */
@@ -11,64 +13,7 @@ GameFlow  gf = new GameFlow();
 Title     ti = new Title();
 Stage[]   st = new Stage[4];
 Chara     ch = new Chara();
-
-//=================================================================================================//
-//key_cotrol//
-//==========//
-boolean up, down, left, right;
-boolean show_htp = false, ask_retry = false, ask_go_title = false;
-void keyPressed() {
-  char[] st = {'1', '2', '3', '4'};
-  if(gf.Title) {
-    if(show_htp == false) {
-      for(int i = 0; i < 4; i++) {
-        if(key == st[i]) {
-          gf.move_to_stage_i(i);            //GameFlow:move_to_stage_i      * i_is_stage_number
-          ch.init_chara();                  //Chara:init_character
-        }
-      }
-    }
-    
-    if(key == 'h' || key == 'H') {
-      show_htp = true;
-    }
-    if(show_htp && keyCode == ENTER) {
-      show_htp = false;
-    }
-  }
-  
-  if(gf.Game == true) {               
-    //about_control_character==begin==
-    if(keyCode == RIGHT) right = true;      //
-    if(keyCode == LEFT)  left = true;       //
-    if(keyCode == UP)    up = true;         //
-    if(keyCode == DOWN)  down = true;       //
-    //about_control_character===end===
-    
-    if(ch.is_dead() && (key == 'r' || key == 'R')) {
-      ask_retry = true;
-    }
-  }
-  
-  if((gf.Game == true && ch.is_dead()) || gf.Clear == true) {
-    if(key == 't' || key == 'T') {
-      ask_go_title = true;
-    }
-  }
-}
-
-
-void keyReleased() {
-  if(gf.Game == true) {               //about_control_character==begin==
-    if(keyCode == RIGHT) right = false;     //
-    if(keyCode == LEFT)  left = false;      //
-    if(keyCode == UP)    up = false;        //
-    if(keyCode == DOWN)  down = false;      //
-  }
-  //about_control_character===end===
-}
-//=================================================================================================//
-
+Time      tm = new Time();
 
 
 //=================================================================================================//
@@ -94,16 +39,18 @@ void askRetry() {
       st[gf.Stage_id].inputBrokenCharaStatus(ch.cx, ch.cy, ch.cd);                 //Stage:memorize_chara's_broken_point
     }
     st[gf.Stage_id].init_stage();                                         //Stage:init_stage
+    st[gf.Stage_id].init_stage_for_each();
     ch.init_chara();                                                      //Chara:init_character
     ask_retry = false;
   }
 }
 
 void askGoTitle() {
-  if(ask_go_title) {                                                      //go title when 't' or 'T' is pressed
-    st[gf.Stage_id].reset_broken();                                       //reset broken characters
-    st[gf.Stage_id].init_stage();                                         //Stage:init_stage
-    ch.init_chara();                                                      //Chara:init_character
+  if(ask_go_title) {                  //go to the title when 't' or 'T' is pressed
+    st[gf.Stage_id].reset_broken();         //reset broken characters
+    st[gf.Stage_id].init_stage();           //Stage:init_stage
+    st[gf.Stage_id].init_stage_for_each();
+    ch.init_chara();                        //Chara:init_character
     gf.back_title();
     ask_go_title = false;
   }
@@ -111,7 +58,7 @@ void askGoTitle() {
 
 void gameFailed() {
   showMessage("PRESS 'R' TO PLAY AGAIN", 16, width / 2 - 100, height / 2 + 34);
-  showMessage("PRESS 'T' TO BACK TO TITLE", 16, width / 2 - 100, height / 2 + 58);
+  showMessage("PRESS 'T' TO BACK TO THE TITLE", 16, width / 2 - 125, height / 2 + 58);
   st[gf.Stage_id].stop_stage();
   ch.playing = false;
   showMessage("You Lose :(", 28, width / 2 - 70, height / 2 - 34);
@@ -121,9 +68,12 @@ void gameFailed() {
 
 void gameCleared() {
   background(255, 255, 128);
-  showMessage("PRESS 'T' TO BACK TO TITLE", 16, width / 2 - 110, height / 2 + 34);
+  showMessage("PRESS 'T' TO BACK TO THE TITLE", 16, width / 2 - 132, height / 2 + 50);
   ch.playing = false;
-  showMessage("Stage Cleared!!!!!", 28, width / 2 - 110, height / 2 - 34);
+  showMessage("Stage Cleared!!!", 28, width / 2 - 105, height / 2 - 50);
+  if(gf.deadCnt == 0) {
+    showMessage("Marvelous!!!!!", 28, width / 2 - 87, height / 2 - 12);
+  }
   askGoTitle();
 }
 
@@ -136,27 +86,29 @@ void white_out() {
 //=================================================================================================//
 
 
-float step = 3.0;
-void control_character() {
-  if(right == true) ch.move_chara(step, 0);
-  if(left == true) ch.move_chara(-step, 0);
-  if(up == true) ch.move_chara(0, -step);
-  if(down == true) ch.move_chara(0, step);
-}
+//=================================================================================================//
+//Traps_on_stages//
+//====================//
 
-//stage4's trap
-void make_exception_event() {
-  if(st[3].chara_white || (ch.is_dead() && 6000 <= st[3].ms && st[3].ms <= 9000)) {
+//Stage4
+/*
+void make_sayo_nara_event() {
+  st[3].get_time(tm.get_passed_time());
+  if(-st[3].x_pos < 200.0) {
+    ch.change_chara_steps(2.0);
+    tm.measure_start();
+  }
+  if(st[3].chara_white || (ch.is_dead() && tm.jud_time_between(6000, 9000))) {
     ch.chara_white_out(1);
-  } else {
+  } else if(ch.is_dead() == false && tm.jud_time_between(9000, -1)){
     ch.chara_get_color();
   }
   if(st[3].chara_stop) {
-    step = 0.0;
+    ch.change_chara_steps(0.0);
   } else if(ch.is_dead() == false) {
-    step = 3.0;
+    ch.change_chara_steps(3.0);
   }
-} 
+}*/
 
 //=================================================================================================//
 //collision_detection//
@@ -180,28 +132,34 @@ void jud_safe(int id) {
 
   //collision_detection_ELLIPSEs
   for(i = 0; i < st[id].o.elps_num; i++) {
-    if(ch.ifsafe_elps(st[id].o.call_elps_status(i)) == false) {
-      ch.damage();
-      if(ch.is_dead()) {
-        break;
+    if(st[id].o.obelps[i][4] == 1) {
+      if(ch.ifsafe_elps(st[id].o.call_elps_status(i)) == false) {
+        ch.damage();
+        if(ch.is_dead()) {
+          break;
+        }
       }
     }
   }
  
   //collision_detection_RECTANGLEs
   for(i = 0; i < st[id].o.rect_num; i++) {
-    if(ch.ifsafe_rect(st[id].o.call_rect_status(i)) == false) {
-      ch.damage();
-      if(ch.is_dead()) {
-        break;
+    if(st[id].o.obrect[i][4] == 1) {
+      if(ch.ifsafe_rect(st[id].o.call_rect_status(i)) == false) {
+        ch.damage();
+        if(ch.is_dead()) {
+          break;
+        }
       }
     }
   }
+  //collision_detection_RECTANGLE_on_Stage4
+  /*
   if(id == 3) {
     if(ch.ifsafe_rect(st[id].txtrect_status()) == false) {
       ch.damage();
     }
-  }
+  }*/
 
   //collision_detection_BROKEN_CHARAs
   for(i = 0; i < gf.getDeadCount(); i++) {
@@ -217,18 +175,21 @@ void jud_safe(int id) {
 
 //whethere reach the goal or not
 boolean ifGoal(int id) {
-  if(ch.ifsafe_rect(st[id].o.call_goal_status()) == false) {
-    return true;
-  } else {
-    return false;
+  for(int i = 0; i < st[id].o.goal_num; i++) {
+    if(st[id].o.obgoal[i][4] == 1) {
+      if(ch.ifsafe_rect(st[id].o.call_goal_status(i)) == false) {
+        return true;
+      }
+    }
   }
+  return false;
 }
 
 //====================================================================
 //  stage3  //
 //==========//
 ////////////////////stage3///////////////////////////
-float deg,deg2 = 0;
+/*float deg,deg2 = 0;
 PImage img,img2;
 Enemy e;
 PrePlayer p;
@@ -238,7 +199,7 @@ Title t;
 float xP,yP;
 float time= 0;
 float mx = 0;
-float my = 0;
+float my = 0;*/
 //////////////////////////////////////////////////////
 //====================================================================
 
@@ -252,6 +213,7 @@ void setup() {
   ch.init_chara();
   for(int i = 0; i < 4; i++) {
     st[i].init_stage();
+    st[i].init_stage_for_each();
     st[i].set_obj();           //Stage:set_objects
   }
   
@@ -272,6 +234,7 @@ void setup() {
 }
 
 void draw() {
+  tm.measure_whole_time();
   if(gf.Title) {                       //state:title
     ti.display_title();                //Title:display_title
     if(show_htp == true) {             
@@ -281,6 +244,7 @@ void draw() {
   
     /////////////////////////////////////////////////////////////////////////////////////////////////
     if(gf.Stage_id == 2) {
+      background(200);
       //title画面から3を選ぶと////
       changeWindowSize(600, 700);
       println(time);
@@ -324,7 +288,7 @@ void draw() {
       st[gf.Stage_id].showBg();              //Stage:draw_stage_background
       st[gf.Stage_id].events();              //Stage:changing_scroll etc...
       if(gf.Stage_id == 3) {
-        make_exception_event();
+        //make_sayo_nara_event();
       }
       st[gf.Stage_id].display();             //Stage:show_objects
       control_character();

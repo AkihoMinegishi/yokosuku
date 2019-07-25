@@ -1,11 +1,14 @@
 class Chara {
-  float cx, cy, cd = 30.0, cr = cd / 2.0;
+  float cx, cy;
+  float cd = 30.0, cr = cd / 2.0;
+  float steps;
   int lifemax = 3, life = 3, dam = 3;
   color chcol;
   boolean playing = true;
 
   void init_chara() {
     warp_chara(width / 8, height / 2);
+    change_chara_steps(3.0);
     chcol = color(128, 255, 0);
     life = lifemax;
     playing = true;
@@ -115,6 +118,10 @@ class Chara {
     cx = dx;
     cy = dy;
   }
+  
+  void change_chara_steps(float st) {
+    steps = st;
+  } 
   
 //=================================================================================================//  
 }

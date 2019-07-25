@@ -22,11 +22,9 @@ abstract class Stage {
   float x_pos, y_pos;
   float dx, dy;
   int x_direction, y_direction;
+  int passed_time;
   color object_col, broken_col, goal_col;
-  //only for stage4
-  int ms;
-  float fall_y;
-  boolean chara_white = false, chara_stop = false, chara_is_alive;
+  boolean chara_is_alive;
   
   void init_stage() {
     x_pos  = 0;
@@ -37,15 +35,12 @@ abstract class Stage {
     y_direction = 0;
     object_get_color();
     goal_col = color(255, 255, 128);
-    
-    ms = 0;
-    fall_y = 0.0;
-    chara_white = false;
-    chara_stop = false;
     chara_is_alive = true;
+    set_obj();
   }
+  abstract void init_stage_for_each();
   
-  //自動スクロールの方向と速度変更
+  //ステージの方向と速度変更
   void change_scroll_direction_and_speed(float x_pt, float y_pt, float new_dx, float new_dy, int x_dir, int y_dir) {
     if(-x_pos == x_pt && -y_pos == y_pt) {
       dx = new_dx;
@@ -55,6 +50,11 @@ abstract class Stage {
     }
   }
   
+  //get_time_from_Title_class
+  void get_time(int tm) {
+    passed_time = tm;
+  }
+  
   //stop all abjects
   void stop_stage() {
     chara_is_alive = false;
@@ -62,6 +62,7 @@ abstract class Stage {
     dy = 0;
   }
   
+  //white out all objects
   void object_white_out(int cmd) {
     if(cmd == 0) {
       object_col = broken_col = color(240, 240, 240);
@@ -69,21 +70,10 @@ abstract class Stage {
       object_col = broken_col = color(255, 255, 255);
     }
   }
+  //get back color all objects 
   void object_get_color() {
     object_col = color(0, 100, 130);
     broken_col = color(128, 0, 0);
-  }
-  
-  // only for stage4
-  /*void white_out_trap(boolean bo) {
-    chara_white = bo;
-  }*/
-  void chara_stop_trap(boolean bo) {
-    chara_stop = bo;
-  }
-  float[] txtrect_status() {
-    float[] rc = {0, 0, 0, 0};
-    return rc;
   }
 
   void display() {

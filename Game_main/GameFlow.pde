@@ -8,9 +8,9 @@ methods::
 */
 class GameFlow {
   boolean Title, Game, Clear, pressedEnter; //judge statement
-  int Stage_id = 1; //stage number
+  int Stage_id = -1; //stage number
   int deadCnt = 0; //counting death(reseted by moving stage)
-
+  
   GameFlow() {
     Title = true;
     Game  = false;
@@ -44,6 +44,7 @@ class GameFlow {
   
   //back to the title
   void back_title() {
+    Stage_id = 0;
     Title = true;
     Game = Clear = false;
   }
