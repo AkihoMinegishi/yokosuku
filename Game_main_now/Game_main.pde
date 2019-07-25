@@ -189,7 +189,7 @@ boolean ifGoal(int id) {
 //  stage3  //
 //==========//
 ////////////////////stage3///////////////////////////
-float deg,deg2 = 0;
+/*float deg,deg2 = 0;
 PImage img,img2;
 Enemy e;
 PrePlayer p;
@@ -199,7 +199,7 @@ Title t;
 float xP,yP;
 float time= 0;
 float mx = 0;
-float my = 0;
+float my = 0;*/
 //////////////////////////////////////////////////////
 //====================================================================
 
@@ -244,6 +244,7 @@ void draw() {
   
     /////////////////////////////////////////////////////////////////////////////////////////////////
     if(gf.Stage_id == 2) {
+      background(200);
       //title画面から3を選ぶと////
       changeWindowSize(600, 700);
       println(time);
