@@ -48,7 +48,6 @@ void askGoTitle() {
   if(ask_go_title) {                  //go title when 't' or 'T' is pressed
     st[gf.Stage_id].reset_broken();       //reset broken characters
     st[gf.Stage_id].init_stage();         //Stage:init_stage
-    st[gf.Stage_id].set_obj();            //Stage:set_objects again 
     ch.init_chara();                      //Chara:init_character
     gf.back_title();
     ask_go_title = false;

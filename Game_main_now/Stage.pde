@@ -36,6 +36,7 @@ abstract class Stage {
     object_get_color();
     goal_col = color(255, 255, 128);
     chara_is_alive = true;
+    set_obj();
   }
   
   //ステージの方向と速度変更
