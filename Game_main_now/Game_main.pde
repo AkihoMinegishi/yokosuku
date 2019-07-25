@@ -39,6 +39,7 @@ void askRetry() {
       st[gf.Stage_id].inputBrokenCharaStatus(ch.cx, ch.cy, ch.cd);                 //Stage:memorize_chara's_broken_point
     }
     st[gf.Stage_id].init_stage();                                         //Stage:init_stage
+    st[gf.Stage_id].init_stage_for_each();
     ch.init_chara();                                                      //Chara:init_character
     ask_retry = false;
   }
@@ -46,9 +47,10 @@ void askRetry() {
 
 void askGoTitle() {
   if(ask_go_title) {                  //go to the title when 't' or 'T' is pressed
-    st[gf.Stage_id].reset_broken();       //reset broken characters
-    st[gf.Stage_id].init_stage();         //Stage:init_stage
-    ch.init_chara();                      //Chara:init_character
+    st[gf.Stage_id].reset_broken();         //reset broken characters
+    st[gf.Stage_id].init_stage();           //Stage:init_stage
+    st[gf.Stage_id].init_stage_for_each();
+    ch.init_chara();                        //Chara:init_character
     gf.back_title();
     ask_go_title = false;
   }
@@ -88,7 +90,7 @@ void white_out() {
 //Traps_on_stages//
 //====================//
 
-//Stage4 
+//Stage4
 /*
 void make_exception_event() {
   st[3].get_time(tm.get_passed_time());
@@ -211,6 +213,7 @@ void setup() {
   ch.init_chara();
   for(int i = 0; i < 4; i++) {
     st[i].init_stage();
+    st[i].init_stage_for_each();
     st[i].set_obj();           //Stage:set_objects
   }
   

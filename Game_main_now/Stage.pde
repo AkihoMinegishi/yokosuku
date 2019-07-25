@@ -38,6 +38,7 @@ abstract class Stage {
     chara_is_alive = true;
     set_obj();
   }
+  abstract void init_stage_for_each();
   
   //ステージの方向と速度変更
   void change_scroll_direction_and_speed(float x_pt, float y_pt, float new_dx, float new_dy, int x_dir, int y_dir) {

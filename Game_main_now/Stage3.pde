@@ -1,5 +1,8 @@
 class Stage3 extends Stage{
 
+  void init_stage_for_each() {
+  }
+  
   void showBg() {
     background(224, 255, 224);
   }

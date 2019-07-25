@@ -1,22 +1,15 @@
 class Stage4 extends Stage {
   float fall_y;
-  boolean chara_white, chara_stop; 
+  boolean chara_white, chara_stop;
   color nor = color(240, 240, 255);
+  boolean create_file;
+  PrintWriter file;
   
-  void init_stage() {
-    x_pos  = 0;
-    y_pos = 0;
-    dx = 2;
-    dy = 0;
-    x_direction = -1;
-    y_direction = 0;
-    object_get_color();
-    goal_col = color(255, 255, 128);
-    chara_is_alive = true;
-    
+  void init_stage_for_each() {    
     fall_y = 0.0;
     chara_white = false;
-    chara_stop = false;
+    chara_stop = false;    
+    create_file = true;
   }
   
   void showBg() {
@@ -47,9 +40,17 @@ class Stage4 extends Stage {
     rect(20, 25+fall_y, 285, 75);
     stroke(0);
     fill(0);
-    textSize(18);
-    text("An exception has occured.", 20, 40+fall_y);
-    text("File\"Game_main/Stage4\", line 21", 20, 70+fall_y);
+    if(create_file) {
+      file = createWriter("traceback.txt");
+      file.print("lol");
+      file.flush();
+      file.close();
+      create_file = false;
+    }
+    textSize(22);
+    text("An exception has occured.", 20, 42+fall_y);
+    textSize(16);
+    text("File\"Game_main/Stage4\", line 54", 20, 75+fall_y);
     text("See traceback.txt for details.", 20, 100+fall_y);
     noFill();
     if(chara_is_alive) {
