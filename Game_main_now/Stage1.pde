@@ -1,5 +1,5 @@
 class Stage1 extends Stage{
-  int object_1 = 13, object_2 = 13;
+  int object_1 = 12, object_2 = 12;
   
   void init_stage_for_each() {
   }

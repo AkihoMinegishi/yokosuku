@@ -59,8 +59,8 @@ void askGoTitle() {
 }
 
 void gameFailed() {
-  showMessage("PRESS 'R' TO PLAY AGAIN", 16, width / 2 - 100, height / 2 + 34);
-  showMessage("PRESS 'T' TO BACK TO THE TITLE", 16, width / 2 - 125, height / 2 + 58);
+  showMessage("PRESS [R] TO PLAY AGAIN", 16, width / 2 - 100, height / 2 + 34);
+  showMessage("PRESS [T] TO BACK TO THE TITLE", 16, width / 2 - 125, height / 2 + 58);
   st[gf.Stage_id].stop_stage();
   ch.playing = false;
   showMessage("You Lose :(", 28, width / 2 - 70, height / 2 - 34);
@@ -70,7 +70,7 @@ void gameFailed() {
 
 void gameCleared() {
   background(255, 255, 128);
-  showMessage("PRESS 'T' TO BACK TO THE TITLE", 16, width / 2 - 132, height / 2 + 50);
+  showMessage("PRESS [T] TO BACK TO THE TITLE", 16, width / 2 - 132, height / 2 + 50);
   ch.playing = false;
   showMessage("Stage Cleared!!!", 28, width / 2 - 105, height / 2 - 50);
   if(gf.deadCnt == 0) {
