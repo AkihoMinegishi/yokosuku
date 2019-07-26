@@ -174,7 +174,7 @@ void changeWindowSize(int w, int h) {
 }
 
 boolean stageHit(float x,float y){
-  if(dist(x,y,0,0) > 500 && dist(x,y,0,0) < 800 && xP+mx < width && xP+mx > 0 && yP+my < height && yP+my > 0){
+  if(dist(x,y,0,0) > 500 && dist(x,y,0,0) < 800){
     return true;
   }
   preX[preN%100] = x;
