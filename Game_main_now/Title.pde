@@ -7,7 +7,7 @@ class Title {
     background(0, 0, 0);
     fill(255);
     textSize(48);
-    text("I WANNA (ry"             , 60, 90);
+    text("I WANA (ry"             , 60, 90);
     textSize(24);
     text("How to play / change key style", 80, 160);
     int pressKey_x = 355;
