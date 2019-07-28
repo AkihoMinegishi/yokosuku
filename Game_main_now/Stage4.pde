@@ -111,7 +111,7 @@ class Stage4 extends Stage {
     change_scroll_direction_and_speed(1400.0, 320.0, 0.0, 20.0,  0, -1);
     change_scroll_direction_and_speed(1400.0, 1600.0, 0.0, 0.5,  0, -1);
     change_scroll_direction_and_speed(1400.0, 1900.0, 0.0, 10.0,   0, -1);
-    change_scroll_direction_and_speed(1400.0, 2100.0, 10.0, 0.0,  -1, 0);
+    change_scroll_direction_and_speed(1400.0, 2100.0, 15.0, 0.0,  -1, 0);
   }
   
   void set_obj() {
