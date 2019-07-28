@@ -4,18 +4,20 @@
 boolean up, down, left, right, change_style;
 boolean show_htp = false, ask_retry = false, ask_go_title = false;
 boolean ifstop_chara = true; //for stage4
+int knmcmd_step;
 
 void keyPressed() {
   
   char[] st = {'1', '2', '3', '4'};
   if(gf.Title) {
     if(show_htp == false) {
+      knmcmd_step = 0;
       //move to the N stage
       for(int i = 0; i < 4; i++) {
         if(key == st[i]) {
           up = down = left = right = false;
           gf.move_to_stage_i(i);            //GameFlow:move_to_stage_i      * i_is_stage_number
-          ch.init_chara();                  //Chara:init_character
+          ch.init_chara(ti.knm_command);    //Chara:init_character
         }
       }
       //show how to play
@@ -28,20 +30,23 @@ void keyPressed() {
         change_style = true;
       }
       //back to the title
-      if(show_htp && keyCode == ENTER) {
+      if(keyCode == ENTER) {
         show_htp = false;
       }
+      
     } 
+  }
+  
+  if((gf.Title && show_htp) || (gf.Game && ti.key_config == 0)) {
+    if(keyCode == RIGHT) right = true;   //move to right
+    if(keyCode == LEFT)  left  = true;   //move to left
+    if(keyCode == UP)    up    = true;   //move to up
+    if(keyCode == DOWN)  down  = true;   //move to down
   }
   
   if(gf.Game) {           
     //about_control_character==begin==
-    if(ti.key_config == 0) {
-      if(keyCode == RIGHT) right = true;   //move to right
-      if(keyCode == LEFT)  left  = true;   //move to left
-      if(keyCode == UP)    up    = true;   //move to up
-      if(keyCode == DOWN)  down  = true;   //move to down
-    } else {
+    if(ti.key_config == 1) {
       if(key == 'd') right = true;   //move to right
       if(key == 'a')  left = true;   //move to left
       if(key == 'w')    up = true;   //move to up
@@ -75,10 +80,23 @@ void keyPressed() {
 void keyReleased() {
   
   if(gf.Title) {
-    if(change_style) {
-      if(keyCode == SHIFT) {
-        ti.key_config = (ti.key_config+1) % 2;
-        change_style = false;
+    if(show_htp) {
+      if(change_style) {
+        if(keyCode == SHIFT) {
+          ti.key_config = (ti.key_config+1) % 2;
+          change_style = false;
+        }
+      }
+      
+      //573 command
+      jud_knm_command(knmcmd_step);
+      if(knmcmd_step == 10) {
+        if(ti.knm_command) {
+          ti.knm_command = false;
+        } else {
+          ti.knm_command = true;
+        }
+        knmcmd_step = 0;
       }
     }
   }
@@ -109,3 +127,10 @@ void control_character() {
   if(down  == true) ch.move_chara(0, ch.steps);
 }
 
+void jud_knm_command(int st) {
+  if(((st <= 1) && keyCode == UP) || ((st == 2 || st == 3) && keyCode == DOWN) || 
+     ((st == 4 || st == 6) && keyCode == LEFT) || ((st == 5 || st == 7) && keyCode == RIGHT) ||
+     (st == 8 && (key == 'b' || key == 'B')) || (st == 9 && (key == 'a' || key == 'A'))) {
+       knmcmd_step++;
+  }
+}

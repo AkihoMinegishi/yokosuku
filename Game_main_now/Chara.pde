@@ -4,14 +4,15 @@ class Chara {
   float steps;
   int lifemax = 3, life = 3, dam = 3;
   color chcol;
-  boolean playing = true;
-
-  void init_chara() {
+  boolean playing = true, operator_mode = false;
+  
+  void init_chara(boolean ope) {
     warp_chara(width / 8, height / 2);
     change_chara_steps(3.0);
     chcol = color(128, 255, 0);
     life = lifemax;
     playing = true;
+    operator_mode = ope;
   }
   
   void chara_white_out(int cmd) {
@@ -71,11 +72,13 @@ class Chara {
 //      //
 //======//
   void damage() {
-    life -= dam;
-    if(life < 0) {
-      life = 0;
-      playing = false;
-      chcol = color(128, 0, 0);
+    if(operator_mode == false) {
+      life -= dam;
+      if(life < 0) {
+        life = 0;
+        playing = false;
+        chcol = color(128, 0, 0);
+      }
     }
   }
 

@@ -110,7 +110,7 @@ class Stage4 extends Stage {
     change_scroll_direction_and_speed(1400.0, 260.0, 0.0, 0.5,   0, -1);
     change_scroll_direction_and_speed(1400.0, 320.0, 0.0, 20.0,  0, -1);
     change_scroll_direction_and_speed(1400.0, 1600.0, 0.0, 0.5,  0, -1);
-    change_scroll_direction_and_speed(1400.0, 1800.0, 0.0, 10.0,   0, -1);
+    change_scroll_direction_and_speed(1400.0, 1900.0, 0.0, 10.0,   0, -1);
     change_scroll_direction_and_speed(1400.0, 2100.0, 10.0, 0.0,  -1, 0);
   }
   
@@ -133,18 +133,21 @@ class Stage4 extends Stage {
     o.set_rect(1900, 600, 1000, 600, 1); //id 5
     o.set_rect(2195, 200, 5, 400, 1); //id 6
     
-    for(int i = 0; i < 10; i++) {
-      o.set_rect(1400+(60*i),    1700, 20, 20, 1);
-      o.set_rect(1400+(60*i)+20, 1800, 20, 20, 1);
-      o.set_rect(1400+(60*i),    1900, 20, 20, 1);
-      o.set_rect(1400+(60*i)+20, 2000, 20, 20, 1);
+    for(int i = 0; i < 9; i++) {
+      int x0 = 1400, y0 = 1850, dx = 10, dy = 70;
+      for(int j = 0; j < 4; j++) {
+        o.set_rect(x0+(70*i)+(dx*j), y0+(dy*j), 20, 20, 1);
+      }
     }
     
-    o.set_elps(1400, 2400, 10, 10, 1);
+    o.set_rect(1400+width/2-70, 2100+height/2-70, 140, 140, 1);
+    
+    o.set_rect(3190, 2100, 10, 130, 1);
+    o.set_rect(3190, 2370, 10, 130, 1);
     
     //goal
     o.set_goal(2200, 0 + 100, width, height + 200, 1); //id 0
-    o.set_goal(2800, 2100, width, height + 200, 1);
+    o.set_goal(3200, 2100, width, height + 200, 1);
   }
 
 }

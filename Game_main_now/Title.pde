@@ -2,6 +2,7 @@ class Title {
   int key_config = 0;
   String[][] dir = {{"[UP]", "[LEFT]", "[DOWN]", "[RIGHT]"}, {"[W]", "[A]", "[S]", "[D]"}};
   String[] mes = {"<WASD>", "<arrow key>"};
+  boolean knm_command = false;
   
   void display_title() {
     background(0, 0, 0);
@@ -29,8 +30,13 @@ class Title {
     background(0, 0, 0);
     fill(255);
     textSize(24);
-    text("How to move your chara"     ,width/10, height*3/20);
+    text("How to move your "     ,width/10, height*3/20);
+    if(knm_command) {
+      fill(255, 255, 0);
+    }
+    text("chara", width/10 + 24*9.25, height*3/20);
     
+    fill(255);
     textSize(20);
     text("up",    width/8, height*5/20);
     text("left",  width/8, height*7/20);

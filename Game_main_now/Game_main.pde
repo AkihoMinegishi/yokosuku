@@ -40,7 +40,7 @@ void askRetry() {
     }
     st[gf.Stage_id].init_stage();                                         //Stage:init_stage
     st[gf.Stage_id].init_stage_for_each();
-    ch.init_chara();                                                      //Chara:init_character
+    ch.init_chara(ti.knm_command);                                        //Chara:init_character
     tm.init_time();                                                       //Time:init_time
     ask_retry = false;
   }
@@ -51,7 +51,7 @@ void askGoTitle() {
     st[gf.Stage_id].reset_broken();         //reset broken characters
     st[gf.Stage_id].init_stage();           //Stage:init_stage
     st[gf.Stage_id].init_stage_for_each();
-    ch.init_chara();                        //Chara:init_character
+    ch.init_chara(ti.knm_command);          //Chara:init_character
     tm.init_time();                         //Time:init_time
     gf.back_title();
     ask_go_title = false;
@@ -116,6 +116,7 @@ void make_sayo_nara_event() {
   }
   if(ifstop_chara == false && tm.jud_time_between(1, 9000) && ch.is_dead() == false) {
     ch.change_chara_steps(3.0);
+    ch.chara_get_color();
   }
 }
 
@@ -218,7 +219,7 @@ void setup() {
   st[1] = new Stage2();
   st[2] = new Stage3();
   st[3] = new Stage4();
-  ch.init_chara();
+  ch.init_chara(ti.knm_command);
   tm.init_time();
   for(int i = 0; i < 4; i++) {
     st[i].init_stage();
