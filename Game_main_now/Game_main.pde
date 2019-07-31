@@ -15,6 +15,7 @@ Stage[]   st = new Stage[5];
 Chara     ch = new Chara();
 Time      tm = new Time();
 
+boolean debug = true;  //*********     knm_cmd = true & print mouseX,mouseY     *********//
 
 //=================================================================================================//
 //show_message//
@@ -249,6 +250,7 @@ void setup() {
   st[2] = new Stage3();
   st[3] = new Stage4();
   st[4] = new Stage5();
+  if(debug) {ti.knm_command = true;}  
   ch.init_chara(ti.knm_command);
   tm.init_time();
   for(int i = 0; i < 5; i++) {
