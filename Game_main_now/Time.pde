@@ -14,6 +14,7 @@ class Time {
   
   void measure_start() {
     ms_measure_start = ms_whole_game;
+    stop = false;
   }
   
   int get_passed_time() {

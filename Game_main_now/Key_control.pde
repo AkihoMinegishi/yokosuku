@@ -20,6 +20,11 @@ void keyPressed() {
           ch.init_chara(ti.knm_command);    //Chara:init_character
         }
       }
+      if(ti.unlock_5th && key == '5') {
+        up = down = left = right = false;
+        gf.move_to_stage_i(4);
+        ch.init_chara(ti.knm_command);
+      }
       //show how to play
       if(keyCode == ENTER) {
         show_htp = true;
@@ -68,7 +73,7 @@ void keyPressed() {
     
   }
   
-  if((gf.Game && ch.is_dead()) || gf.Clear) {
+  if((gf.Stage_id != 2 && (gf.Game && ch.is_dead())) || (gf.Stage_id == 2 && gf.Game && ifIndicate_back_title) || gf.Clear) {
     if(key == 't' || key == 'T') {
       ask_go_title = true;
     }

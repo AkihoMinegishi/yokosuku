@@ -47,6 +47,7 @@ abstract class Stage {
       dy = new_dy;
       x_direction = x_dir;
       y_direction = y_dir;
+      println(-x_pos + ", " + -y_pos);
     }
   }
   
