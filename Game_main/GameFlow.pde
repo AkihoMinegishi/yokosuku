@@ -7,9 +7,10 @@ methods::
  allClear:when_clear(no_if)
 */
 class GameFlow {
-  boolean Title, Game, Clear, pressedEnter; //judge statement
-  int Stage_id = -1; //stage number
+  boolean Title, Game, Clear, ifSumDeadCnt; //judge statement
+  int Stage_id = 0; //stage number
   int deadCnt = 0; //counting death(reseted by moving stage)
+  int[] totalDeadCnt = {0, 0, 0, 0, 0};
   
   GameFlow() {
     Title = true;
@@ -19,9 +20,15 @@ class GameFlow {
 
   //reset die count and warp stage
   void move_to_stage_i(int i) {
+    /*for(int id = 0; id < 5; id++) {
+      print(totalDeadCnt[id] + " ");
+    }
+    println();*/
+    
     Stage_id = i;
     //init
     deadCnt = 0;
+    ifSumDeadCnt = true;
     Game = true;
     Title = Clear = false;
   }
@@ -44,6 +51,14 @@ class GameFlow {
   
   //back to the title
   void back_title() {
+    if(ifSumDeadCnt) {
+      if(Stage_id != 2) {
+        totalDeadCnt[Stage_id] += deadCnt;
+      } else {
+        totalDeadCnt[Stage_id] += preN;
+      }
+      ifSumDeadCnt = false;
+    }
     Stage_id = 0;
     Title = true;
     Game = Clear = false;

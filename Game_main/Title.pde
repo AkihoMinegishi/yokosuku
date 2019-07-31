@@ -1,36 +1,71 @@
 class Title {
-  int key_config = 0;
+  int key_config = 0, mark_cnt;
+  int pressKey_x = 355, stageN_x = 120, select_st_y = 265, select_st_dy = 30;
   String[][] dir = {{"[UP]", "[LEFT]", "[DOWN]", "[RIGHT]"}, {"[W]", "[A]", "[S]", "[D]"}};
   String[] mes = {"<WASD>", "<arrow key>"};
+  boolean knm_command = false;
+  boolean if_measure = true, show_unlocking = true, unlock_5th = false, thx4play = false;
+  boolean[] if_clear_marks = {false, false, false, false, false};
   
-  void display_title() {
+  void display_title() { 
     background(0, 0, 0);
     fill(255);
-    textSize(48);
-    text("I WANNA (ry"             , 60, 90);
+    textSize(36);
+    if(thx4play == false) {
+      text("I WANA PLAY THE \"YOKOSUKU\"?", 25, 80);
+    } else {
+      fill(255, 255, 64);
+      text("THANK YOU FOR PLAYING!!!", 55, 80);
+    }
+    fill(255);
     textSize(24);
-    text("How to play / change key style", 80, 160);
-    int pressKey_x = 355;
-    text("-press [ENTER]", pressKey_x, 200);
+    text("How to play / change key style", 80, 140);
+    text("-press [ENTER]", pressKey_x, 180);
     
-    text("Game start", 80, 240);
-    int stageN_x = 120;
-    text("stage1 (tutorial)", stageN_x, 275);
-    text("-press [1]",      pressKey_x, 275);
-    text("stage2",            stageN_x, 305);
-    text("-press [2]",      pressKey_x, 305);
-    text("stage3",            stageN_x, 335);
-    text("-press [3]",      pressKey_x, 335);
-    text("stage4",            stageN_x, 365);
-    text("-press [4]",      pressKey_x, 365);
+    text("Game start", 80, 225);
+    text("stage1 (tutorial)", stageN_x, select_st_y);
+    text("-press [1]",      pressKey_x, select_st_y);
+    text("stage2",            stageN_x, select_st_y + select_st_dy);
+    text("-press [2]",      pressKey_x, select_st_y + select_st_dy);
+    text("stage3",            stageN_x, select_st_y + select_st_dy * 2);
+    text("-press [3]",      pressKey_x, select_st_y + select_st_dy * 2);
+    text("stage4",            stageN_x, select_st_y + select_st_dy * 3);
+    text("-press [4]",      pressKey_x, select_st_y + select_st_dy * 3);
+    if(unlock_5th) {
+      fill(255, 255, 128);
+      text("stage5",            stageN_x, select_st_y + select_st_dy * 4);
+      text("-press [5]",      pressKey_x, select_st_y + select_st_dy * 4);
+      fill(255);
+    }
+    
+    for(int id = 0; id < 5; id++) {
+      int mark_d = 16;
+      if(id == 0) fill(128, 255, 128);
+      if(id == 1) fill(255, 128, 128);
+      if(id == 2) fill(119, 188, 240);
+      if(id == 3) fill(192, 192, 255);
+      if(id == 4) fill(255, 255, 64);
+      if(if_clear_marks[id]) {
+        ellipse(stageN_x - mark_d, select_st_y + select_st_dy * id - mark_d / 2, mark_d, mark_d);
+      }
+    }
+    
+    if(show_unlocking == true && cnt_clear_marks() >= 4) {
+      show_5th();
+    }
   }
 
   void display_how_to_play() {
     background(0, 0, 0);
     fill(255);
     textSize(24);
-    text("How to move your chara"     ,width/10, height*3/20);
+    text("How to move your "     ,width/10, height*3/20);
+    if(knm_command) {
+      fill(255, 255, 0);
+    }
+    text("chara", width/10 + 24*9.25, height*3/20);
     
+    fill(255);
     textSize(20);
     text("up",    width/8, height*5/20);
     text("left",  width/8, height*7/20);
@@ -44,6 +79,40 @@ class Title {
     text("press [SHIFT]  ... change style to " + mes[key_config], width/10, height*14/20);
     
     text("press [ENTER] ... back to the title" ,width/10, height*17/20);
+    
+    if(knm_command) {
+      for(int i = 0; i < 5; i++) {
+        if_clear_marks[i] = true;
+      }
+    }
   }
 
+  int cnt_clear_marks() {
+    int cnt = 0;
+    for(int id = 0; id < 5; id++) {
+      if(if_clear_marks[id]) {
+        cnt++;
+      }
+    }
+    return cnt;
+  }
 }
+
+void show_5th() {
+  int show_len = 1000, rCol, gCol, bCol;
+  if(ti.if_measure) {
+    tm.measure_start();
+    ti.if_measure = false;
+  }
+  rCol = int(255 * (tm.get_passed_time() * 1.0 / show_len));
+  gCol = int(255 * (tm.get_passed_time() * 1.0 / show_len));
+  bCol = int(128 * (tm.get_passed_time() * 1.0 / show_len));
+  fill(rCol, gCol, bCol);
+  text("stage5",       ti.stageN_x, ti.select_st_y + ti.select_st_dy * 4);
+  text("-press [5]", ti.pressKey_x, ti.select_st_y + ti.select_st_dy * 4);
+  if(tm.get_passed_time() > show_len) {
+    ti.show_unlocking = false;
+    ti.unlock_5th = true;
+  }
+}
+

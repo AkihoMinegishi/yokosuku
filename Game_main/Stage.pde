@@ -47,6 +47,7 @@ abstract class Stage {
       dy = new_dy;
       x_direction = x_dir;
       y_direction = y_dir;
+      println(-x_pos + ", " + -y_pos);
     }
   }
   
@@ -92,6 +93,8 @@ abstract class Stage {
     popMatrix();              //元描画座標軸の呼び出し
     x_pos += dx * x_direction;
     y_pos += dy * y_direction;
+    
+    if(debug) {println(mouseX - x_pos, mouseY - y_pos);}
   }
   
   abstract void events();        //about_scroll_change_etc...
@@ -137,5 +140,10 @@ abstract class Stage {
     precnt = 0;
   }
 //=================================================================================================//
-
+  
+  //for stage4
+  float[] txtrect_status() {
+    float[] st = {0, 0, 0, 0};
+    return st;
+  }
 }

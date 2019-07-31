@@ -11,10 +11,11 @@
 */
 GameFlow  gf = new GameFlow();
 Title     ti = new Title();
-Stage[]   st = new Stage[4];
+Stage[]   st = new Stage[5];
 Chara     ch = new Chara();
 Time      tm = new Time();
 
+boolean debug = true;  //*********     knm_cmd = true & print mouseX,mouseY     *********//
 
 //=================================================================================================//
 //show_message//
@@ -35,30 +36,38 @@ void askRetry() {
   if(ask_retry) {                                                                  //retry when 'r' or 'R' is pressed
     float[] around_first_pos = {width / 8, height / 2, ch.cd * 2.5, ch.cd * 2.5};  //avoid respawn-kill
     if(ch.ifsafe_elps(around_first_pos)) {                                        
-      gf.increase_deadCnt();                                                       //GameFlow:deadCnt++
       st[gf.Stage_id].inputBrokenCharaStatus(ch.cx, ch.cy, ch.cd);                 //Stage:memorize_chara's_broken_point
     }
+    gf.increase_deadCnt();                                                       //GameFlow:deadCnt++
     st[gf.Stage_id].init_stage();                                         //Stage:init_stage
     st[gf.Stage_id].init_stage_for_each();
-    ch.init_chara();                                                      //Chara:init_character
+    ch.init_chara(ti.knm_command);                                        //Chara:init_character
+    tm.init_time();                                                       //Time:init_time
     ask_retry = false;
   }
 }
 
 void askGoTitle() {
   if(ask_go_title) {                  //go to the title when 't' or 'T' is pressed
+    if(ch.is_dead()) {
+      gf.increase_deadCnt();
+    }
     st[gf.Stage_id].reset_broken();         //reset broken characters
     st[gf.Stage_id].init_stage();           //Stage:init_stage
     st[gf.Stage_id].init_stage_for_each();
-    ch.init_chara();                        //Chara:init_character
-    gf.back_title();
+    ch.init_chara(ti.knm_command);          //Chara:init_character
+    tm.init_time();                         //Time:init_time
+    gf.back_title();                        //GameFlow:calc total death and go title 
+    if(width != 600 || height != 400) {
+      changeWindowSize(600, 400);
+    }
     ask_go_title = false;
   }
 }
 
 void gameFailed() {
-  showMessage("PRESS 'R' TO PLAY AGAIN", 16, width / 2 - 100, height / 2 + 34);
-  showMessage("PRESS 'T' TO BACK TO THE TITLE", 16, width / 2 - 125, height / 2 + 58);
+  showMessage("PRESS [R] TO PLAY AGAIN", 16, width / 2 - 100, height / 2 + 34);
+  showMessage("PRESS [T] TO BACK TO THE TITLE", 16, width / 2 - 125, height / 2 + 58);
   st[gf.Stage_id].stop_stage();
   ch.playing = false;
   showMessage("You Lose :(", 28, width / 2 - 70, height / 2 - 34);
@@ -66,14 +75,37 @@ void gameFailed() {
   askGoTitle();
 }
 
+void fill_aleart(int cnt) {
+  int len = 1500, rCol, gCol, bCol;
+  if(cnt == 4) {
+    int tm_per = tm.get_passed_time() % len;
+    if(tm_per >= len / 2) tm_per = len - tm_per;
+    rCol = int(255 * (tm_per * 1.0 / (len / 2)));
+    gCol = int(255 * (tm_per * 1.0 / (len / 2)));
+    bCol = int(128 * (tm_per * 1.0 / (len / 2)));
+    fill(rCol, gCol, bCol);
+  }
+}
+
 void gameCleared() {
-  background(255, 255, 128);
-  showMessage("PRESS 'T' TO BACK TO THE TITLE", 16, width / 2 - 132, height / 2 + 50);
-  ch.playing = false;
+  if(gf.Stage_id <= 3) {
+    background(255, 255, 128);
+  } else {
+    background(255, 64, 64);
+    ti.thx4play = true;
+  }
+  ti.if_clear_marks[gf.Stage_id] = true;
+  fill(0);
+  fill_aleart(ti.cnt_clear_marks());
+  textSize(16);
+  text("PRESS [T] TO BACK TO THE TITLE", width / 2 - 132, height / 2 + 50);
   showMessage("Stage Cleared!!!", 28, width / 2 - 105, height / 2 - 50);
-  if(gf.deadCnt == 0) {
+  if(gf.Stage_id == 2 && preN > 0) {
+    showMessage("Retry Count: " + preN, 20, width / 2 - 70, height / 2 - 12);
+  } else if(gf.deadCnt == 0){
     showMessage("Marvelous!!!!!", 28, width / 2 - 87, height / 2 - 12);
   }
+  ch.playing = false;
   askGoTitle();
 }
 
@@ -91,24 +123,32 @@ void white_out() {
 //====================//
 
 //Stage4
-/*
 void make_sayo_nara_event() {
+  if(ch.is_dead()) {
+    tm.stop_time();
+  }
+  
   st[3].get_time(tm.get_passed_time());
   if(-st[3].x_pos < 200.0) {
     ch.change_chara_steps(2.0);
     tm.measure_start();
+    ifstop_chara = true;
   }
-  if(st[3].chara_white || (ch.is_dead() && tm.jud_time_between(6000, 9000))) {
+  
+  if(tm.jud_time_between(1, 9000)) {
     ch.chara_white_out(1);
-  } else if(ch.is_dead() == false && tm.jud_time_between(9000, -1)){
+  } else if(ch.is_dead() == false) {
     ch.chara_get_color();
   }
-  if(st[3].chara_stop) {
+  
+  if(ifstop_chara && tm.jud_time_between(1, 9000)) {
     ch.change_chara_steps(0.0);
-  } else if(ch.is_dead() == false) {
-    ch.change_chara_steps(3.0);
   }
-}*/
+  if(ifstop_chara == false && tm.jud_time_between(1, 9000) && ch.is_dead() == false) {
+    ch.change_chara_steps(3.0);
+    ch.chara_get_color();
+  }
+}
 
 //=================================================================================================//
 //collision_detection//
@@ -154,12 +194,11 @@ void jud_safe(int id) {
     }
   }
   //collision_detection_RECTANGLE_on_Stage4
-  /*
   if(id == 3) {
     if(ch.ifsafe_rect(st[id].txtrect_status()) == false) {
       ch.damage();
     }
-  }*/
+  }
 
   //collision_detection_BROKEN_CHARAs
   for(i = 0; i < gf.getDeadCount(); i++) {
@@ -210,8 +249,11 @@ void setup() {
   st[1] = new Stage2();
   st[2] = new Stage3();
   st[3] = new Stage4();
-  ch.init_chara();
-  for(int i = 0; i < 4; i++) {
+  st[4] = new Stage5();
+  if(debug) {ti.knm_command = true;}  
+  ch.init_chara(ti.knm_command);
+  tm.init_time();
+  for(int i = 0; i < 5; i++) {
     st[i].init_stage();
     st[i].init_stage_for_each();
     st[i].set_obj();           //Stage:set_objects
@@ -247,7 +289,7 @@ void draw() {
       background(200);
       //title画面から3を選ぶと////
       changeWindowSize(600, 700);
-      println(time);
+      //println(time);
       time++;
       if(time%4000 > 100 && time%2000 < 450){
         mx-=0.5;my+=1.0;
@@ -275,20 +317,21 @@ void draw() {
       fill(0,0,255);
       textSize(100);
       text(time,-100,0);
-      if(time > 2300){
+      if(time > 2300) {
         textSize(100);
         text("Clear!",500,0);
         text("RETRY:",500,100);
         text(preN,500,200);
-        noLoop();
+        gf.stageClear();
       }
       popMatrix();
+      ask_back_title_st3(preN);
     } else {///////////////////////////////////////////////////////////////////////////////////////     
       
       st[gf.Stage_id].showBg();              //Stage:draw_stage_background
       st[gf.Stage_id].events();              //Stage:changing_scroll etc...
       if(gf.Stage_id == 3) {
-        //make_sayo_nara_event();
+        make_sayo_nara_event();
       }
       st[gf.Stage_id].display();             //Stage:show_objects
       control_character();

@@ -1,5 +1,5 @@
 float mx = 0;
-float my = 0;float deg,deg2 = 0;
+float my = 0; float deg,deg2 = 0;
 PImage img,img2;
 Enemy e;
 PrePlayer p;
@@ -14,15 +14,20 @@ int preN = 0;
 
 
 class Stage3 extends Stage{
-
-  void init_stage_for_each() {}
-  void events() {}
-  void set_obj() {}
-  
+  void events(){}        //about_scroll_change_etc...
+   void init_stage_for_each() {
+     preN = 0;
+     reset();
+   }
+ 
   void showBg() {
     background(224, 255, 224);
+    
   }
   
+  void set_obj(){
+    o.rect_num = o.elps_num = o.goal_num = 0;
+  }
   void display() {
     changeWindowSize(600, 700);
     fill(119,188,240);
@@ -31,7 +36,6 @@ class Stage3 extends Stage{
     ellipse(0,-0,1000,1000);
    //drawGear(); 
   }
-  
 }
 
 
@@ -52,16 +56,18 @@ class PrePlayer{
   }
   void preMe(){
     fill(128);
-    for(int i = 0;i <100;i++){
+    int max_pre = min(preN, 100);
+    for(int i = 0;i < max_pre;i++){
       fill(128);
       ellipse(preX[i],preY[i],10,10);
       hit(preMHit(xP,yP));
     }
   }
   
-  boolean preMHit(float x,float y){
+   boolean preMHit(float x,float y){
     int flag = 0;
-    for(int j = 0;j <100;j++){
+    int max_pre = min(preN, 100);
+    for(int j = 0;j <max_pre;j++){
       if(dist(x,y,preX[j],preY[j]) <= 10){
        if(preX[j]!=10 && preY[j] != 600){ 
           preX[preN%100] = x;
@@ -134,8 +140,9 @@ class Enemy{
     return true;
   }
   void preEHit(){
-    for(int i = 0;i < 100;i++){
-      for(int j = 0;j < 100;j++){
+    int max_pre = min(preN, 100);
+    for(int i = 0;i < max_pre;i++){
+      for(int j = 0;j < max_pre;j++){
         if(dist(preX[j],preY[j],enemys[i][0],enemys[i][1]) < sizeE[i]/2){
           h[i] = true;
         }
@@ -160,7 +167,6 @@ void hit(boolean x){
   if(key == 'r')reset();loop();
 }
 
-
 class Stage3_draw{
   void drawStage(float mx,float my){
     translate(mx,my);
@@ -176,12 +182,33 @@ class Stage3_draw{
 void changeWindowSize(int w, int h) {
   frame.setSize( w + frame.getInsets().left + frame.getInsets().right, h + frame.getInsets().top + frame.getInsets().bottom );
   size(w, h);
-  }
-  boolean stageHit(float x,float y){
-  if(dist(x,y,0,0) > 500 && dist(x,y,0,0) < 800 && xP+mx < width && xP+mx > 0 && yP+my < height && yP+my > 0){
+}
+
+boolean stageHit(float x,float y){
+  if(dist(x,y,0,0) > 500 && dist(x,y,0,0) < 800){
     return true;
   }
   preX[preN%100] = x;
   preY[preN%100] = y;
   return false;
+}
+
+
+boolean ifIndicate_back_title = false;
+int pre_preN_ask_back = -1;
+
+void ask_back_title_st3(int pN) {
+  if(pN > 0 && pN % 15 == 0 && pN != pre_preN_ask_back) {
+    pre_preN_ask_back = pN;
+    ifIndicate_back_title = true;
+    tm.measure_start();
+  }
+  if(ifIndicate_back_title) {
+    if(tm.get_passed_time() <= 5000) {
+      showMessage("YOU CAN PRESS [T] TO BACK TO THE TITLE NOW", 16, 20, 20);
+      askGoTitle();
+    } else {
+      ifIndicate_back_title = false;
+    }
+  }
 }

@@ -1,11 +1,11 @@
 class Stage1 extends Stage{
-  int object_1 = 13, object_2 = 13;
+  int object_1 = 10, object_2 = 10;
   
   void init_stage_for_each() {
   }
   
   void showBg() {
-    background(255, 255, 224);
+    background(240, 255, 240);
   }
   
   void events() {
