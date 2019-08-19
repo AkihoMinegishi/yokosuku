@@ -439,15 +439,21 @@ class Saves {
     textSize(24);
     
     textAlign(CENTER);
-    text("Are you sure to save the current data?", width/2, height*3/10);
+    text("Are you sure to save the current data?", width/2, height*3/12);
     textSize(20);
     textAlign(LEFT);
     fill(255, 200, 200);
-    text("Yes",       width*6/20, height*11/20);
-    text("-press [Y]", width*11/20, height*11/20);
+    text("Yes",       width*6/20, height*5/12);
+    text("-press [Y]", width*11/20, height*5/12);
     fill(200, 255, 200);
-    text("No",        width*6/20, height*13/20);
-    text("-press [N]", width*11/20, height*13/20);
+    text("No",        width*6/20, height*7/12);
+    text("-press [N]", width*11/20, height*7/12);
+    
+    fill(255);
+    textSize(18);
+    text("The save data is \"save_file/save.chr\".", width*3/20, height*9/12);
+    text("Don't rewrite it with editor.", width*3/20, height*10/12);
+    text("If you do it, the game will be......", width*3/20, height*11/12);
   }
   
   
