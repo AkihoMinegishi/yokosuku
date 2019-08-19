@@ -39,7 +39,39 @@ void keyPressed() {
         show_htp = false;
       }
       
-    } 
+    }
+    
+    if(key == 's' || key == 'S') {
+      gf.move_to_save_screen();
+    }
+    if(!sv.ifnew_file && sv.ifask_load_file) {
+      if(key == 'y' || key == 'Y') {
+        if(sv.ifright_file) {
+          load_file();
+          sv.ifask_load_file = false;
+        } else {
+          tm.measure_start();
+          sv.ifshow_penalty = true;
+        }
+      }
+      if(key == 'n' || key == 'N') {
+        sv.reset_file();
+        sv.ifask_load_file = false;
+      }
+    }
+  }
+  
+  if(gf.Saves) {
+    if(key == 'y' || key == 'Y') {
+      sv.write_file(gf.totalDeadCnt, 
+                 ti.knm_command, ti.show_unlocking, ti.unlock_5th, ti.thx4play, ti.if_clear_marks);
+      load_file();
+      
+      gf.back_title();
+    }
+    if(key == 'n' || key == 'N') {
+      gf.back_title();
+    }
   }
   
   if((gf.Title && show_htp) || (gf.Game && ti.key_config == 0)) {

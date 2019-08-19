@@ -14,8 +14,8 @@ Title     ti = new Title();
 Stage[]   st = new Stage[5];
 Chara     ch = new Chara();
 Time      tm = new Time();
+Saves     sv = new Saves();
 
-boolean debug = true;  //*********     knm_cmd = true & print mouseX,mouseY     *********//
 
 //=================================================================================================//
 //show_message//
@@ -224,6 +224,15 @@ boolean ifGoal(int id) {
   return false;
 }
 
+//=================================================================================================//
+//about saving//
+//===================//
+void load_file() {
+  gf.set_deadCnt(sv.load_dc());
+  ti.set_bolSet(sv.load_set());
+  ti.set_clMks(sv.load_mks());
+}
+
 //====================================================================
 //  stage3  //
 //==========//
@@ -244,19 +253,23 @@ float my = 0;*/
 
 
 void setup() {
-  size(600, 400);//
+  size(600, 400);
   st[0] = new Stage1();
   st[1] = new Stage2();
   st[2] = new Stage3();
   st[3] = new Stage4();
   st[4] = new Stage5();
-  if(debug) {ti.knm_command = true;}  
   ch.init_chara(ti.knm_command);
   tm.init_time();
   for(int i = 0; i < 5; i++) {
     st[i].init_stage();
     st[i].init_stage_for_each();
     st[i].set_obj();           //Stage:set_objects
+  }
+  sv.get_file();
+  sv.check_new_file();
+  if(!sv.ifnew_file) {
+    sv.check_right_file();
   }
   
   ///////////////////stage3////////////////////////////
@@ -282,6 +295,11 @@ void draw() {
     if(show_htp == true) {             
       ti.display_how_to_play();        //Title:display_how_to_play
     }
+    if(!sv.ifnew_file && sv.ifask_load_file) {
+      sv.ask_load_file();
+    }
+  } else if(gf.Saves) {
+    sv.show_save_screen();
   } else if(gf.Game) {                     //state:game
   
     /////////////////////////////////////////////////////////////////////////////////////////////////

@@ -11,18 +11,23 @@ class Title {
     background(0, 0, 0);
     fill(255);
     textSize(36);
+    textAlign(CENTER);
     if(thx4play == false) {
-      text("I WANA PLAY THE \"YOKOSUKU\"?", 25, 80);
+      text("I WANA PLAY THE \"YOKOSUKU\"?", width/2, 70);
     } else {
       fill(255, 255, 64);
-      text("THANK YOU FOR PLAYING!!!", 55, 80);
+      text("THANK YOU FOR PLAYING!!!", width/2, 70);
     }
+    textAlign(LEFT);
+    textSize(22);
+    fill(210, 255, 210);
+    text("How to play / change key style", 80, 115);
+    text("-press [ENTER]", pressKey_x, 145);
+    fill(255, 210, 210);
+    text("Save current data", 80, 190);
+    text("-press [S]", pressKey_x, 190);
     fill(255);
-    textSize(24);
-    text("How to play / change key style", 80, 140);
-    text("-press [ENTER]", pressKey_x, 180);
-    
-    text("Game start", 80, 225);
+    text("Game start", 80, 235);
     text("stage1 (tutorial)", stageN_x, select_st_y);
     text("-press [1]",      pressKey_x, select_st_y);
     text("stage2",            stageN_x, select_st_y + select_st_dy);
@@ -72,18 +77,22 @@ class Title {
     text("down",  width/8, height*9/20);
     text("right", width/8, height*11/20);
     for(int i = 0; i < 4; i++) {
-      text("-press " + dir[key_config][i], width/4, height*(i*2+5)/20);
+      text("-press ", width/4, height*(i*2+5)/20);
+      fill(255, 220, 220);
+      text(dir[key_config][i], width*3/8, height*(i*2+5)/20);
+      fill(255);
     }
     
     textSize(22);
+    fill(255, 220, 220);
     text("press [SHIFT]  ... change style to " + mes[key_config], width/10, height*14/20);
-    
+    fill(210, 255, 210);
     text("press [ENTER] ... back to the title" ,width/10, height*17/20);
-    
+    fill(255);
     if(knm_command) {
-      for(int i = 0; i < 5; i++) {
-        if_clear_marks[i] = true;
-      }
+      unlock_5th = true;
+    } else if(show_unlocking) {
+      unlock_5th = false;
     }
   }
 
@@ -96,10 +105,23 @@ class Title {
     }
     return cnt;
   }
+  
+  void set_bolSet(boolean[] sets) {
+    knm_command = sets[0];
+    show_unlocking = sets[1];
+    unlock_5th = sets[2];
+    thx4play = sets[3];
+  }
+  
+  void set_clMks(boolean[] mks) {
+    for(int i = 0; i < 5; i++) {
+      if_clear_marks[i] = mks[i];
+    }
+  }
 }
 
 void show_5th() {
-  int show_len = 1000, rCol, gCol, bCol;
+  int show_len = 2000, rCol, gCol, bCol;
   if(ti.if_measure) {
     tm.measure_start();
     ti.if_measure = false;

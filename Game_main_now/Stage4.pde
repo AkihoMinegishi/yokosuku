@@ -59,7 +59,7 @@ class Stage4 extends Stage {
     pw.print("JumpException: ");
     pw.println(mes1);
     pw.println(mes2);
-  } //these message are nonsense lol (this gimmick is inspired by DDLC)
+  } //these message are nonsense lol (this gimmick is inspired by "Doki Doki Literature Club!")
   
   void sayo_nara_event() {
     change_scroll_direction_and_speed(200, 0.0, 2.0, 0.0, 0, 0);
