@@ -1,8 +1,11 @@
 class Stage1 extends Stage{
-  int object_1 = 13, object_2 = 13;
+  int object_1 = 10, object_2 = 10;
+  
+  void init_stage_for_each() {
+  }
   
   void showBg() {
-    background(255, 255, 224);
+    background(240, 255, 240);
   }
   
   void events() {
@@ -58,7 +61,7 @@ class Stage1 extends Stage{
        }
     }
     
-    for(int i = 0; i < 9; i++) {
+    for(int i = 0; i < 10; i++) {
       if(i < 8) {
         o.set_rect(width + 200*i, 0,                 200, 5*(i+1),     1); //seil
         o.set_rect(width + 200*i, height - 5*(i+1),  200, 5*(i+1)+100, 1); //floor

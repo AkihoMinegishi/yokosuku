@@ -7,23 +7,31 @@ methods::
  allClear:when_clear(no_if)
 */
 class GameFlow {
-  boolean Title, Game, Clear, pressedEnter; //judge statement
-  int Stage_id = -1; //stage number
+  boolean Title, Saves, Game, Clear, ifSumDeadCnt; //judge statement
+  int Stage_id = 0; //stage number
   int deadCnt = 0; //counting death(reseted by moving stage)
+  int[] totalDeadCnt = {0, 0, 0, 0, 0};
   
   GameFlow() {
     Title = true;
+    Saves = false;
     Game  = false;
     Clear = false;
   }
-
+  
+  void move_to_save_screen() {
+    Saves = true;
+    Title = Game = Clear = false;
+  }
+  
   //reset die count and warp stage
-  void move_to_stage_i(int i) {
+  void move_to_stage_i(int i) {    
     Stage_id = i;
     //init
     deadCnt = 0;
+    ifSumDeadCnt = true;
     Game = true;
-    Title = Clear = false;
+    Title = Saves = Clear = false;
   }
 
   //+1 die count
@@ -35,17 +43,32 @@ class GameFlow {
   int getDeadCount() {
     return deadCnt;
   }
-
+  
+  void set_deadCnt(int[] cnts) {
+    for(int i = 0; i < 5; i++) {
+      totalDeadCnt[i] = cnts[i];
+    }
+  }
   //move to the end of the game
   void stageClear() {
     Clear = true;
-    Title = Game = false;
+    Title = Saves = Game = false;
   }
   
   //back to the title
   void back_title() {
+    if(Clear) {
+      if(ifSumDeadCnt) {
+        if(Stage_id != 2) {
+          totalDeadCnt[Stage_id] += deadCnt;
+        } else {
+          totalDeadCnt[Stage_id] += preN;
+        }
+        ifSumDeadCnt = false;
+      }
+    }
     Stage_id = 0;
     Title = true;
-    Game = Clear = false;
+    Saves = Game = Clear = false;
   }
 }
